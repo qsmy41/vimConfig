@@ -1,0 +1,508 @@
+#################################
+# => Content
+#################################
+
+# 1. General structures
+# 2. Fractions
+# 3. Symbols simplified
+# 4. Speed up small things
+
+#################################
+# => End of content
+#################################
+
+#################################
+# => Improvements comments
+#################################
+
+# 1.
+# have a snippet that type "lr" with a certain bracket, say '(', so that:
+# \left($1\right)
+# is added to the line
+# How to make the bracket flexible?
+# currently just hard-coded () and []
+
+# 2.
+# inspired by the castel ultisnips, regarding "xii" and "xjj"
+# write a snippet that can accept any two duplicating char, not limited to i or j
+# e.g. xkk, xll, xpp, etc.
+
+#################################
+# => End of Comments
+#################################
+
+global !p
+texMathZones = ['texMathZone'+x for x in ['A', 'AS', 'B', 'BS', 'C', 'CS', 'D', 'DS', 'E', 'ES', 'F', 'FS', 'G', 'GS', 'H', 'HS', 'I', 'IS', 'J', 'JS', 'K', 'KS', 'L', 'LS', 'DS', 'V', 'W', 'X', 'Y', 'Z']]
+texIgnoreMathZones = ['texMathText']
+texMathZoneIds = vim.eval('map('+str(texMathZones)+", 'hlID(v:val)')")
+texIgnoreMathZoneIds = vim.eval('map('+str(texIgnoreMathZones)+", 'hlID(v:val)')")
+ignore = texIgnoreMathZoneIds[0]
+def math():
+	synstackids = vim.eval("synstack(line('.'), col('.') - (col('.')>=2 ? 1 : 0))")
+	try:
+		first = next(i for i in reversed(synstackids) if i in texIgnoreMathZoneIds or i in texMathZoneIds)
+		return first != ignore
+	except StopIteration:
+		return False
+endglobal
+
+#################################
+# => General Structures
+#################################
+
+snippet reporttemplate "template" bA
+\documentclass[12pt]{report}
+\usepackage[thinc]{esdiff} % for typesettign derivatives
+\usepackage{amsthm} % provides an enhanced version of LaTex's \newtheorem command
+\usepackage{mdframed} % framed environments that can split at page boundaries
+\usepackage{enumitem} % bulletin points or other means of listing things
+\usepackage{amssymb} % for AMS symbols
+
+\theoremstyle{definition}
+\mdfdefinestyle{defEnv}{%
+  hidealllines=false,
+  nobreak=true,
+  innertopmargin=-1ex,
+}
+
+\pagestyle{headings}
+\author{$1}
+\title{$2}
+\begin{document}
+\maketitle
+\tableofcontents
+
+$0
+
+\end{document}
+endsnippet
+
+snippet package "package" b
+\usepackage[${1:optionis}]{${2:package}}
+$0
+endsnippet
+
+snippet definition "definition" b
+\newmdtheoremenv[style=defEnv]{$1}[theorem]{Definition}
+\begin{$1}
+	$2
+\end{$1}
+$0
+endsnippet
+
+snippet theorem "theorem" b
+\newmdtheoremenv[style=defEnv]{$1}[theorem]{Theorem}
+\begin{$1}
+	$2
+\end{$1}
+$0
+endsnippet
+
+snippet example "example" b
+\newtheorem{$1}[theorem]{Example}
+\begin{$1}
+	$2
+\end{$1}
+$0
+endsnippet
+
+snippet item "item" b
+\begin{itemize}
+		\item $1
+\end{itemize}
+$0
+endsnippet
+
+snippet list "list" b
+\begin{enumerate}[label = (\\$1*)]
+    \item $2
+\end{enumerate}
+$0
+endsnippet
+
+snippet description "description" b
+\begin{description}
+		\item[$1] $2
+\end{description}
+$0
+endsnippet
+
+snippet beg "begin{} / end{}" bA
+\begin{$1}
+	$2
+\end{$1}
+$0
+endsnippet
+
+snippet \[ "\[ / \]" iA
+\[
+	$1
+\]$0
+endsnippet
+
+# if $2 is replaced with $0, the second '$' would be
+# overwritten when jumping between entries
+# immediately having `!p so that $2 is not in new line.
+snippet mk "InlineMath" wA
+$${1}$`!pif t[2] and t[2][0] not in [',', '.', '?', '-', ' ']:
+	snip.rv = ' 'else:
+	snip.rv = ''
+`$2
+endsnippet
+
+snippet box "box up" b
+\fbox{\begin{minipage}{\linewidth}
+$1
+\end{minipage}}
+$0
+endsnippet
+
+#################################
+# => End of General Structures
+#################################
+
+#################################
+# => Fractions
+#################################
+
+context "math()"
+snippet // "Fraction" iA
+\\frac{$1}{$2}$0
+endsnippet
+
+snippet / "Fraction" i
+\\frac{${VISUAL}}{$1}$0
+endsnippet
+
+context "math()"
+snippet '((\d+)|(\d*)(\\)?([A-Za-z]+)((\^|_)(\{\d+\}|\d))*)/' "Fraction" wrA
+\\frac{`!p snip.rv = match.group(1)`}{$1}$0
+endsnippet
+
+priority 1000
+context "math()"
+snippet '^.*\)/' "() Fraction" wrA
+`!p
+stripped = match.string[:-1]
+depth = 0
+i = len(stripped) - 1
+while True:
+	if stripped[i] == ')': depth += 1
+	if stripped[i] == '(': depth -= 1
+	if depth == 0 : break;
+	i -= 1
+snip.rv = stripped[0:i] + "\\frac{" + stripped[i+1:-1] + "}"
+`{$1}$0
+endsnippet
+
+context "math()"
+snippet "dd([a-zA-Z])" "d/dx / d/dy / ..." riA
+\\frac{\mathrm{d} $1}{\mathrm{d}`!p snip.rv=match.group(1)`} $2
+endsnippet
+
+context "math()"
+snippet "pd([a-zA-Z])" "partial derivative of d/dx / d/dy / ..." riA
+\\frac{\partial $1}}{\partial `!p snip.rv=match.group(1)`} $2
+endsnippet
+
+#################################
+# => End of fractions
+#################################
+
+#################################
+# => Symbols simplified
+#################################
+
+context "math()"
+snippet +- "plus/minus" iA
+\\pm
+endsnippet
+
+context "math()"
+snippet -+ "minus/plus" iA
+\\mp
+endsnippet
+
+context "math()"
+snippet != "not equal" iA
+\\neq
+endsnippet
+
+priority 10
+context "math()"
+snippet -> "approaches" iA
+\\rightarrow
+endsnippet
+
+priority 100
+context "math()"
+snippet --> "arrows to" iA
+\\longrightarrow
+endsnippet
+
+priority 100
+context "math()"
+snippet !-> "does not approach" iA
+\\nrightarrow
+endsnippet
+
+priority 200
+context "math()"
+snippet !--> "does not arrow to" iA
+\\nlongrightarrow
+endsnippet
+
+priority 10
+context "math()"
+snippet => "implies" iA
+\\Rightarrow
+endsnippet
+
+priority 100
+context "math()"
+snippet ==> "long-implies" iA
+\\Longrightarrow
+endsnippet
+
+priority 100
+context "math()"
+snippet !=> "does not imply" iA
+\\nRightarrow
+endsnippet
+
+priority 200
+context "math()"
+snippet !==> "does not long-implies" iA
+\\nLongrightarrow
+endsnippet
+
+priority 10
+context "math()"
+snippet -< "left arrow" iA
+\\leftarrow
+endsnippet
+
+priority 100
+context "math()"
+snippet --< "long left arrow" iA
+\\longleftarrow
+endsnippet
+
+priority 100
+context "math()"
+snippet !-< "not left arrow" iA
+\\nleftarrow
+endsnippet
+
+priority 200
+context "math()"
+snippet !--< "not long left arrow" iA
+\\nlongleftarrow
+endsnippet
+
+priority 10
+context "math()"
+snippet =< "implied by" iA
+\\Leftarrow
+endsnippet
+
+priority 100
+context "math()"
+snippet ==< "long-implied by" iA
+\\Longleftarrow
+endsnippet
+
+priority 100
+context "math()"
+snippet !=< "not implied by" iA
+\\nLeftarrow
+endsnippet
+
+priority 200
+context "math()"
+snippet !==< "not long-implied by" iA
+\\nLongleftarrow
+endsnippet
+
+context "math()"
+snippet l.. "l..." iA
+\\ldots
+endsnippet
+
+context "math()"
+snippet c.. "cdots" iA
+\\cdots
+endsnippet
+
+context "math()"
+snippet v.. "vdots" iA
+\\vdots
+endsnippet
+
+context "math()"
+snippet d.. "ddots" iA
+\\ddots
+endsnippet
+
+context "math()"
+snippet ** "cdot" iA
+\\cdot
+endsnippet
+
+context "math()"
+snippet << "<<" iA
+\\ll
+endsnippet
+
+context "math()"
+snippet >> ">>" iA
+\\gg
+endsnippet
+
+context "math()"
+snippet iff "iff" iA
+\\iff
+endsnippet
+
+context "math()"
+snippet ooo "infinity" iA
+\\infty
+endsnippet
+
+#################################
+# => End of Symbols simplified
+#################################
+
+#################################
+# => Speed up small things
+#################################
+
+context "math()"
+snippet '([A-Za-z])(\d)' "auto subscript" wrA
+`!p snip.rv = match.group(1)`_`!p snip.rv = match.group(2)`
+endsnippet
+
+context "math()"
+snippet '([A-Za-z])_(\d\d)' "auto subscript2" wrA
+`!p snip.rv = match.group(1)`_{`!p snip.rv = match.group(2)`$1}$2
+endsnippet
+
+snippet __ "subscript" iA
+_{$1}$2
+endsnippet
+
+snippet lr( "() - height adjusted" iA
+\\left($1\\right) $2
+endsnippet
+
+snippet lr[ "[] - height adjusted" iA
+\\left[$1\\right] $2
+endsnippet
+
+snippet lr{ "{} - height adjusted" iA
+\\left\\{$1\\right\\} $2
+endsnippet
+
+snippet lr| "|| - height adjusted" iA
+\\left|$1\\right| $2
+endsnippet
+
+snippet lr\| "|| || = height adjusted" iA
+\\left\|$1\\right\| $2
+endsnippet
+
+snippet sr "square root" iA
+\\sqrt{$1}$2
+endsnippet
+
+priority 10
+snippet tp "To the Power of (^)" iA
+^{$1}$2
+endsnippet
+
+priority 100
+snippet (tp "{()}^{}" iA
+{($1)}^{$2}$3
+endsnippet
+
+priority 100
+snippet [tp "{[]}^{}" iA
+{[$1]}^{$2}$3
+endsnippet
+
+priority 100
+snippet |tp "{||}^{}" iA
+{|$1|}^{$2}$3
+endsnippet
+
+priority 500
+snippet l(tp "{()}^{} - height adjusted" iA
+{\\left($1\\right)}^{$2}$3
+endsnippet
+
+priority 500
+snippet l[tp "{[]}^{} - height adjusted" iA
+{\\left[$1\\right]}^{$2}$3
+endsnippet
+
+priority 500
+snippet l|tp "{||}^{} - height adjusted" iA
+{\\left|$1\\right|}^{$2}$3
+endsnippet
+
+priority 10
+context "math()"
+snippet bar "bar" iA
+\\overline{$1}$2
+endsnippet
+
+priority 100
+context "math()"
+snippet "(\\?\w+)bar" "bar" riA
+\\overline{`!p snip.rv=match.group(1)`}
+endsnippet
+
+priority 10
+context "math()"
+snippet hat "hat" iA
+\\hat{$1}$2
+endsnippet
+
+priority 100
+context "math()"
+snippet "([a-zA-Z])hat" "hat" riA
+\\hat{`!p snip.rv=match.group(1)`}
+endsnippet
+
+context "math()"
+snippet "(\\?\w+)(,\.|\.,)" "Vector postfix" riA
+\\overrightarrow{`!p snip.rv=match.group(1)`}
+endsnippet
+
+priority 300
+context "math()"
+snippet dint "integral" wA
+\\int_{${1:-\infty}}^{${2:\infty}} $3
+endsnippet
+
+priority 10
+context "math()"
+snippet sum "summation" iA
+\\sum $1
+endsnippet
+
+priority 100
+context "math()"
+snippet dsum "summation with bounds" iA
+\\sum_{${1:n=1}}^{${2:\infty}} ${3:a_n x^n}
+endsnippet
+
+context "math()"
+snippet taylor "taylor" iA
+\\sum_{${1:n}=${2:0}}^{${3:\infty}} ${4:a_$1} ${5:(x-x_0)^$1}
+endsnippet
+
+#################################
+# => End of speed up small things
+#################################
+
