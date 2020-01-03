@@ -17,8 +17,11 @@ git clone https://github.com/qsmy41/vimConfig
 ```
 vim .vimrc
 ```
-3. change content to `runtime vimrc` and source it
+3. change its content to one-line `runtime vimrc`.
+4. Install the plugins and source vimrc
 ```
+:PluginInstall
+:PlugInstall
 :source ~/.vimrc
 ```
 
