@@ -130,6 +130,7 @@ let g:UltiSnipsEditSplit = "tabdo"
 
 " vundle
 " call :PluginInstall for installation
+" call :PluginClean to remove undeclared plugins
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
