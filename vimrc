@@ -15,6 +15,13 @@ set incsearch
 set hlsearch
 set ignorecase
 
+" FINDING FILES
+" search down into subfolders
+" provide tab-completion for all file-related tasks
+set path+=**
+" display all matching files while tab completion
+set wildmenu
+
 " turn off highlighting when not searching
 " <Leader> is '\'
 nnoremap <Leader><space> :noh<return><esc>
@@ -23,10 +30,10 @@ nnoremap <C-p> <C-o>
 
 " navigate among windows in the same tab
 " <C> is "Ctrl"
-nnoremap <C-y> <C-w>h
-nnoremap <C-u> <C-w>j
-nnoremap <C-i> <C-w>k
-nnoremap <C-o> <C-w>l
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 
 "Rename tabs to show tab# and # of viewports
 set tabpagemax=15
@@ -90,8 +97,8 @@ endif
 
 " ale settings
 " to jump between errors and warnings
-nmap <silent> <C-m> <Plug>(ale_previous_wrap)
-nmap <silent> <C-n> <Plug>(ale_next_wrap)
+nnoremap <silent> <C-m> <Plug>(ale_previous_wrap)
+nnoremap <silent> <C-n> <Plug>(ale_next_wrap)
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
 let g:ale_open_list = 1
@@ -110,6 +117,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 let g:NERDTreeWinPos = "right"
 " move to the first buffer
 autocmd VimEnter * wincmd p
+autocmd BufWinEnter * NERDTreeMirror
 
 " Use <S-j> and <S-k> to navigate the completion list
 inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
