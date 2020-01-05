@@ -97,29 +97,32 @@ endif
 
 " ale settings
 " to jump between errors and warnings
-nnoremap <silent> <C-m> <Plug>(ale_previous_wrap)
-nnoremap <silent> <C-n> <Plug>(ale_next_wrap)
+nmap <silent> <C-m> <Plug>(ale_previous_wrap)
+nmap <silent> <C-n> <Plug>(ale_next_wrap)
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
 let g:ale_open_list = 1
 " control the time for ale to do linting
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
+" show errors and warnings in the status line
+let g:airline#extension#ale#enabled = 1
 " error window closes together when the main window closes
 autocmd QuitPre * if empty(&bt) | lclose | endif
 
-" load up the nerd tree
-autocmd vimenter * NERDTree
-map <Leader>t <plug>NERDTreeTabsToggle<CR>
+nnoremap <Leader>t :NERDTreeToggle<CR>
 " NERDTree window closes together with the main window
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " move nerdtree to the right
 let g:NERDTreeWinPos = "right"
+" load up the nerd tree when vim is first opened
 " move to the first buffer
-autocmd VimEnter * wincmd p
-autocmd BufWinEnter * NERDTreeMirror
+" autocmd vimenter * NERDTree
+" autocmd VimEnter * wincmd p
+" open nerdtree whenever a new tab/window is opened
+" autocmd BufWinEnter * NERDTreeMirror
 
-" Use <S-j> and <S-k> to navigate the completion list
+" Use <C-j> and <C-k> to navigate the completion list
 inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
 inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "\<C-k>"
 
@@ -181,7 +184,7 @@ colorscheme gruvbox
 
 au BufNewFile, BufRead *.tex
   let g:tex_flavor='latex'
-  let g:vimtex_view_method='mupdf'
+  " let g:vimtex_view_method='mupdf'
   let g:vimtex_quickfix_mode=0
   set conceallevel=1
   let g:tex_conceal='abdmg'
