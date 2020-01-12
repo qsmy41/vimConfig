@@ -14,6 +14,8 @@ set backspace=indent,eol,start
 set incsearch
 set hlsearch
 set ignorecase
+" set leader key to be the space bar
+let mapleader = "\<Space>"
 
 " FINDING FILES
 " search down into subfolders
@@ -97,6 +99,8 @@ endif
 
 " ale settings
 " to jump between errors and warnings
+" must be nmap instead of nnoremap because the command involves in recursion
+" while "nore" prevents recursion from happening
 nmap <silent> <C-m> <Plug>(ale_previous_wrap)
 nmap <silent> <C-n> <Plug>(ale_next_wrap)
 let g:ale_sign_error = '❌'

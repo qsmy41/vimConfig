@@ -50,13 +50,14 @@ endglobal
 # => General Structures
 #################################
 
-snippet reporttemplate "template" bA
-\documentclass[12pt]{report}
+snippet template "template" bA
+\documentclass[12pt]{${1:report}}
 \usepackage[thinc]{esdiff} % for typesettign derivatives
 \usepackage{amsthm} % provides an enhanced version of LaTex's \newtheorem command
 \usepackage{mdframed} % framed environments that can split at page boundaries
 \usepackage{enumitem} % bulletin points or other means of listing things
 \usepackage{amssymb} % for AMS symbols
+\usepackage{amsmath} % so as to use align
 
 \theoremstyle{definition}
 \mdfdefinestyle{defEnv}{%
@@ -66,8 +67,8 @@ snippet reporttemplate "template" bA
 }
 
 \pagestyle{headings}
-\author{$1}
-\title{$2}
+\author{$2}
+\title{$3}
 \begin{document}
 \maketitle
 \tableofcontents
