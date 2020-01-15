@@ -50,7 +50,7 @@ endglobal
 # => General Structures
 #################################
 
-snippet template "template" bA
+snippet template "template" b
 \documentclass[12pt]{${1:report}}
 \usepackage[thinc]{esdiff} % for typesettign derivatives
 \usepackage{amsthm} % provides an enhanced version of LaTex's \newtheorem command
@@ -83,7 +83,7 @@ snippet package "package" b
 $0
 endsnippet
 
-snippet definition "definition" b
+snippet def "definition" b
 \newmdtheoremenv[style=defEnv]{$1}[theorem]{Definition}
 \begin{$1}
 	$2
@@ -196,14 +196,16 @@ snip.rv = stripped[0:i] + "\\frac{" + stripped[i+1:-1] + "}"
 `{$1}$0
 endsnippet
 
+priority 10
 context "math()"
 snippet "dd([a-zA-Z])" "d/dx / d/dy / ..." riA
-\\frac{\mathrm{d} $1}{\mathrm{d}`!p snip.rv=match.group(1)`} $2
+\\frac{\mathrm{d}$1}{\mathrm{d}`!p snip.rv=match.group(1)`$2} $3
 endsnippet
 
+priority 100
 context "math()"
-snippet "pd([a-zA-Z])" "partial derivative of d/dx / d/dy / ..." riA
-\\frac{\partial $1}}{\partial `!p snip.rv=match.group(1)`} $2
+snippet "pdd([a-zA-Z])" "partial derivative of d/dx / d/dy / ..." riA
+\\frac{\partial $1}}{\partial `!p snip.rv=match.group(1)`$2} $3
 endsnippet
 
 #################################
@@ -325,22 +327,18 @@ snippet !==< "not long-implied by" iA
 \\nLongleftarrow
 endsnippet
 
-context "math()"
 snippet l.. "l..." iA
 \\ldots
 endsnippet
 
-context "math()"
 snippet c.. "cdots" iA
 \\cdots
 endsnippet
 
-context "math()"
 snippet v.. "vdots" iA
 \\vdots
 endsnippet
 
-context "math()"
 snippet d.. "ddots" iA
 \\ddots
 endsnippet
@@ -361,6 +359,11 @@ snippet >> ">>" iA
 endsnippet
 
 context "math()"
+snippet <-> "<->" iA
+\\leftrightarrow
+endsnippet
+
+context "math()"
 snippet <=> "iff" iA
 \\iff
 endsnippet
@@ -370,6 +373,11 @@ snippet ooo "infinity" iA
 \\infty
 endsnippet
 
+context "math()"
+snippet xxx "times" iA
+\\times
+endsnippet
+
 #################################
 # => End of Symbols simplified
 #################################
@@ -377,6 +385,51 @@ endsnippet
 #################################
 # => Speed up small things
 #################################
+
+context "math()"
+snippet pmat "matrix with parenthesis" i
+\\begin{pmatrix}
+		$1
+\\end{pmatrix} $0
+endsnippet
+
+context "math()"
+snippet bmat "matrix with square brackets" i
+\\begin{bmatrix}
+		$1
+\\end{bmatrix} $0
+endsnippet
+
+snippet uli "underline" i
+\\underline{$1}$2
+endsnippet
+
+snippet thi "thick(bold)" i
+\\textbf{$1} $2
+endsnippet
+
+context "math()"
+snippet bo "bold (in maths environment)" i
+\\pmb{$1}$2
+endsnippet
+
+snippet ek "emphasize" i
+\\emph{$1} $2
+endsnippet
+
+snippet te "Thick Emphasize (emph and bold)" i
+\\textbf{\\emph{$1}} $2
+endsnippet
+
+priority 10
+snippet tu "thick underline" i
+\\textbf{\\underline{$1}} $2
+endsnippet
+
+priority 100
+snippet etu "emphasized thick underline" i
+\\underline{\\emph{\\textbf{$1}}} $2
+endsnippet
 
 context "math()"
 snippet '([A-Za-z])(\d)' "auto subscript" wrA
@@ -480,19 +533,16 @@ snippet "(\\?\w+)(,\.|\.,)" "Vector postfix" riA
 \\overrightarrow{`!p snip.rv=match.group(1)`}
 endsnippet
 
-priority 300
+context "math()"
+snippet "([A-Z])bb" "\mathbb" riA
+\\mathbb{`!p snip.rv=match.group(1)`}
+endsnippet
+
 context "math()"
 snippet dint "integral" wA
 \\int_{${1:-\infty}}^{${2:\infty}} $3
 endsnippet
 
-priority 10
-context "math()"
-snippet sum "summation" iA
-\\sum $1
-endsnippet
-
-priority 100
 context "math()"
 snippet dsum "summation with bounds" iA
 \\sum_{${1:n=1}}^{${2:\infty}} ${3:a_n x^n}
