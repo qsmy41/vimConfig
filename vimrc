@@ -1,21 +1,40 @@
+
+
+" Content:
+" 1. General
+" 2. Plugins Settings
+" 3. Plugins
+" 4. Miscellaneous
+
+
+""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""
 " => General
 """"""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
+" 1. Main
+" 2. Mappings
+" 3. Autocmds
+
+""""""""""""""""""""""""""""""
+" => Main
+""""""""""""""""""""""""""""""
+
 set number
 set relativenumber
 set autoindent
 set expandtab
-set tabstop=2
+set tabstop=4
 set shiftwidth=4
+set textwidth=70
 set showcmd
-" by default backspacing auto-indentation, line breaks or previous edits are not allowed.
+" by default backspacing auto-indentation, 
+" line breaks or previous edits are not allowed.
 set backspace=indent,eol,start 
 " Enable highlightiing matching search patterns and incremental search
 set incsearch
 set hlsearch
 set ignorecase
-" set leader key to be the space bar
-let mapleader = "\<Space>"
 
 " FINDING FILES
 " search down into subfolders
@@ -24,11 +43,36 @@ set path+=**
 " display all matching files while tab completion
 set wildmenu
 
+""""""""""""""""""""""""""""""
+" => End Main
+""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
+" => Mappings
+""""""""""""""""""""""""""""""
+
+" Don't use <esc> to go back to normal mode!
+inoremap sd <esc>
+vnoremap sd <esc>
+nnoremap sd <esc>
+" remapping <esc> only leads to problems
+" for learning purpose
+" inoremap <esc> <nop>
+" vnoremap <esc> <nop>
+" nnoremap <esc> <nop>
+
+" set leader key to be the space bar
+let mapleader = "\<Space>"
+" maplocalleader is the same, except for the name,
+" and is used for specific buffers
+" let maplocalleader = "\\"
+
+" for quick editing and sourcing of vimrc
+nnoremap <Leader>ev :vs ~/.vim/vimrc<cr>
+nnoremap <Leader>sv :source $MYVIMRC<cr>
+
 " turn off highlighting when not searching
-" <Leader> is '\'
+" default <Leader> is '\'
 nnoremap <Leader><space> :noh<return><esc>
-" jump to the previous cursor position
-nnoremap <C-p> <C-o>
 
 " navigate among windows in the same tab
 " <C> is "Ctrl"
@@ -36,6 +80,116 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+
+" for obtaining the selected texts
+" and add chars to the front and back of it.
+" obtain the selected text by using '\0'.
+vnoremap s :/.*/
+
+onoremap H 0
+onoremap L $
+" movement of change the content of the next/last parenthesis
+" /r is an escape sequence meaning "carriage return",
+" equivalent to pressing the return key
+onoremap in( :<c-u>execute "normal! /(\rvi("<cr>
+onoremap il( :<c-u>execute "normal! ?)\rvi("<cr>
+onoremap in[ :<c-u>execute "normal! /[\rvi["<cr>
+onoremap il[ :<c-u>execute "normal! ?]\rvi["<cr>
+onoremap in{ :<c-u>execute "normal! /{\rvi{"<cr>
+onoremap il{ :<c-u>execute "normal! ?}\rvi{"<cr>
+onoremap in< :<c-u>execute "normal! /<\rvi<"<cr>
+onoremap il< :<c-u>execute "normal! ?>\rvi<"<cr>
+onoremap in" :<c-u>execute "normal! /\"\rlvi\""<cr>
+onoremap il" :<c-u>execute "normal! ?\"\rhvi\""<cr>
+onoremap in' :<c-u>execute "normal! /'\rlvi'"<cr>
+onoremap il' :<c-u>execute "normal! ?'\rhvi'"<cr>
+" Question: how to have the string of command containing regex?
+" it seems like the search pattern does not work
+" when \r and other chars append at the back of the search string.
+
+" remapping 0 and $ with H and L
+nnoremap H 0
+nnoremap L $   
+nnoremap 0 H
+nnoremap $ L
+
+" fun with vim regex: match an email address
+nnoremap email /\([a-zA-Z0-9_\.\-]\)\+@\([a-zA-Z0-9_\-]\)\+\(\.\([a-zA-Z]\)\{,5}\)\{,5}<cr>
+
+" change current split's width and height
+" did not find a way to map using CTRL, 
+" (mapping punctuations seem unsupported)
+" so have to press leader key arbitrary number of times...
+" noremap <Leader>n <C-w><
+" noremap <Leader>m <C-w>-
+" noremap <Leader>, <C-w>+
+" noremap <Leader>. <C-w>>
+
+""""""""""""""""""""""""""""""
+" => End Mappings
+""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
+" => Autocmds
+""""""""""""""""""""""""""""""
+
+" benefit of augroup
+" 1. group autocmds together 
+" 2. avoid duplication of those commands
+"    after sourcing the file by using autocmd!
+"    to clear the autocmds.
+" 3. if there are some groups with the same name
+"    only the first one will be called and executed.
+augroup forLols
+    autocmd!
+    autocmd VimEnter * echo 'Welcome To Vim >^.^<'
+augroup END
+
+" e.g. the following will not be called
+" augroup forLols
+"   autocmd VimEnter * echo 'I don't want to say anything!'
+" augroup END
+
+augroup pythonFiles
+    au!
+    au BufNewFile,BufRead *.py
+                \ setlocal tabstop=4        |
+                \ setlocal softtabstop=4    |
+                \ setlocal shiftwidth=4     |
+                \ setlocal textwidth=80     |
+                \ setlocal expandtab        |
+                \ setlocal autoindent       |
+                \ setlocal fileformat=unix  |
+                \ setlocal conceallevel=1
+    au FileType python nnoremap <buffer> <F9> :w <bar> :exec '!python' shellescape(@%, 1)<cr>
+    " example of writing a snippet using vimscript
+    au FileType python :iabbrev <buffer> iff if:<left>
+augroup END
+
+augroup latexFiles
+    au!
+    au BufNewFile,BufRead *.tex 
+                \ setlocal tabstop=4        |
+                \ setlocal shiftwidth=4     |
+                \ setlocal textwidth=80     |
+                \ setlocal expandtab        |
+                \ setlocal autoindent       |
+                \ setlocal conceallevel=2
+augroup END
+
+augroup htmlFiles
+    au!
+    au BufWritePre,BufRead *.html :normal gg=G
+augroup END
+
+augroup quickCommenting
+    au!
+    au FileType javascript  nnoremap <buffer> <localleader>c    I//<space><esc>
+    au FileType python      nnoremap <buffer> <localleader>c    I#<space><esc>
+augroup END
+
+""""""""""""""""""""""""""""""
+" => End Autocmds
+""""""""""""""""""""""""""""""
 
 "Rename tabs to show tab# and # of viewports
 set tabpagemax=15
@@ -94,7 +248,15 @@ if exists("+showtabline")
 endif
 
 """"""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
+" => End General
+""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
+
+""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 " => Plugins Settings
+""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""
 
 " ale settings
@@ -103,6 +265,8 @@ endif
 " while "nore" prevents recursion from happening
 nmap <silent> <C-m> <Plug>(ale_previous_wrap)
 nmap <silent> <C-n> <Plug>(ale_next_wrap)
+" toggle ale on and off
+nnoremap <Leader>c :ALEToggle<CR>
 let g:ale_sign_error = '❌'
 let g:ale_sign_warning = '⚠️'
 let g:ale_open_list = 1
@@ -119,33 +283,42 @@ nnoremap <Leader>t :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " move nerdtree to the right
 let g:NERDTreeWinPos = "right"
-" load up the nerd tree when vim is first opened
-" move to the first buffer
-" autocmd vimenter * NERDTree
-" autocmd VimEnter * wincmd p
-" open nerdtree whenever a new tab/window is opened
-" autocmd BufWinEnter * NERDTreeMirror
 
 " Use <C-j> and <C-k> to navigate the completion list
-inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
-inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "\<C-k>"
+" inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
+" inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "\<C-k>"
 
 " ultisnips settings
 " the following four settings are just not working...
 let g:UltiSnipsExpandTrigger = "<tab>"
 let g:UltiSnipsListSnippets = "<c-tab>"
-let g:UltiSnipsJumpForwardTrigger = "<c-l>"
-let g:UltiSnipsJumpBackwardTrigger = "<c-h>"
+let g:UltiSnipsJumpForwardTrigger = "<c-j>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
 " :UltiSnipsEdit split window mode - new tab
 let g:UltiSnipsEditSplit = "tabdo"
 
+" vimtex settings
+let g:tex_flavor='latex'
+" let g:vimtex_view_method='mupdf'
+let g:vimtex_quickfix_mode=0
+let g:tex_conceal='abdgm'
+
+""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
+" => End Plugins Settings
+""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
+
 """""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 " Plug-ins
 """""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 
 " vundle
-" call :PluginInstall for installation
-" call :PluginClean to remove undeclared plugins
+" :PluginInstall for installation
+" :PluginClean to remove undeclared plugins
+" :PluginUpdate to update the plugins
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
@@ -167,14 +340,17 @@ Plugin 'honza/vim-snippets'
 call vundle#end()
 
 " vim-plug
-" call :PlugInstall for installation
-" call :PlugClean to remove undeclared plugins
+" :PlugInstall for installation
+" :PlugClean to remove undeclared plugins
+" :PlugUpdate to update all plugins
 call plug#begin('~/.vim/plugged')
 
 " Conquer of Completion
 Plug 'neoclide/coc.nvim', {'branch' : 'release'}
 " latex for vim
 Plug 'lervag/vimtex'
+" further latex conceal level support
+Plug 'KeitaNakamura/tex-conceal.vim', {'for': 'tex'}
 
 call plug#end()
 
@@ -182,28 +358,27 @@ syntax on
 filetype plugin indent on
 colorscheme gruvbox
 
+"""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""
-" => Latex section
-""""""""""""""""""""""""""""""
-
-au BufNewFile, BufRead *.tex
-  let g:tex_flavor='latex'
-  " let g:vimtex_view_method='mupdf'
-  let g:vimtex_quickfix_mode=0
-  set conceallevel=1
-  let g:tex_conceal='abdmg'
-
-""""""""""""""""""""""""""""""
-" => Python section
+" End Plug-ins
+"""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""
 
-au BufNewFile, BufRead *.py
-  \ set tabstop=4
-  \ set softtabstop=4
-  \ set shiftwidth=4
-  \ set textwidth=79
-  \ set expandtab
-  \ set autoindent
-  \ set fileformat=unix
-  nnoremap <buffer> <F9> :w <bar> :exec '!python' shellescape(@%, 1)<cr>
+""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
+" => Miscellaneous
+""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 
+" typing the second word will change to the remaining text automatically
+" common typo
+iabbrev waht what
+" Personal info
+iabbrev @@ ariszyq123@gmail.com
+iabbrev ccopy Copyright 2020 Aris Zhu Yi Qing, all rights reserved.
+
+""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
+" => End Miscellaneous
+""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""

@@ -16,21 +16,19 @@
 #################################
 
 # 1.
-# have a snippet that type "lr" with a certain bracket, say '(', so that:
-# \left($1\right)
-# is added to the line
-# How to make the bracket flexible?
-# currently just hard-coded () and []
-
-# 2.
 # inspired by the castel ultisnips, regarding "xii" and "xjj"
 # write a snippet that can accept any two duplicating char, not limited to i or j
 # e.g. xkk, xll, xpp, etc.
+
+# 2.
+# write a snippet such that you can select them and do underbrace/overbrace on them,
+# similar to the one with division, where you can select a block and implement.
 
 #################################
 # => End of Comments
 #################################
 
+# define "context math()"
 global !p
 texMathZones = ['texMathZone'+x for x in ['A', 'AS', 'B', 'BS', 'C', 'CS', 'D', 'DS', 'E', 'ES', 'F', 'FS', 'G', 'GS', 'H', 'HS', 'I', 'IS', 'J', 'JS', 'K', 'KS', 'L', 'LS', 'DS', 'V', 'W', 'X', 'Y', 'Z']]
 texIgnoreMathZones = ['texMathText']
@@ -50,7 +48,7 @@ endglobal
 # => General Structures
 #################################
 
-snippet template "template" b
+snippet model "template" b
 \documentclass[12pt]{${1:report}}
 \usepackage[thinc]{esdiff} % for typesettign derivatives
 \usepackage{amsthm} % provides an enhanced version of LaTex's \newtheorem command
@@ -58,6 +56,12 @@ snippet template "template" b
 \usepackage{enumitem} % bulletin points or other means of listing things
 \usepackage{amssymb} % for AMS symbols
 \usepackage{amsmath} % so as to use align
+\usepackage{latexsym} % so as to use symbols like \leadsto
+\usepackage{mathrsfs} % for using mathscr for char like operators
+\usepackage{authblk} % for writing affiliations
+\usepackage{graphicx} % for importing images
+\graphicspath{{./images/}} % for the path to images, also always put label behind captions
+\usepackage{textcomp} % for using degree symbol
 
 \theoremstyle{definition}
 \mdfdefinestyle{defEnv}{%
@@ -67,8 +71,9 @@ snippet template "template" b
 }
 
 \pagestyle{headings}
-\author{$2}
+\author{Lectured by $2}
 \title{$3}
+\affil{Typed by Aris Zhu Yi Qing}
 \begin{document}
 \maketitle
 \tableofcontents
@@ -93,6 +98,30 @@ endsnippet
 
 snippet theorem "theorem" b
 \newmdtheoremenv[style=defEnv]{$1}[theorem]{Theorem}
+\begin{$1}
+	$2
+\end{$1}
+$0
+endsnippet
+
+snippet prop "proposition" b
+\newmdtheoremenv[style=defEnv]{$1}[theorem]{Proposition}
+\begin{$1}
+	$2
+\end{$1}
+$0
+endsnippet
+
+snippet lemma "lemma" b
+\newmdtheoremenv[style=defEnv]{$1}[theorem]{Lemma}
+\begin{$1}
+	$2
+\end{$1}
+$0
+endsnippet
+
+snippet coro "corollary" b
+\newmdtheoremenv[style=defEnv]{$1}[theorem]{Corollary}
 \begin{$1}
 	$2
 \end{$1}
@@ -128,11 +157,26 @@ snippet description "description" b
 $0
 endsnippet
 
-snippet beg "begin{} / end{}" bA
-\begin{$1}
-	$2
-\end{$1}
+snippet figure "figure" b
+\begin{figure}
+  	\includegraphics[scale=0.15]{$1}
+  	\centering
+  	\caption{$2}\label{$3}
+\end{figure}
 $0
+endsnippet
+
+snippet beg "begin{} / end{}" bA
+\begin{$1}$2
+	$3
+\end{$1} $0
+endsnippet
+
+
+snippet beg "begin{} / end{}" i
+\begin{$1}$2
+	$3
+\end{$1} $0
 endsnippet
 
 snippet \[ "\[ / \]" iA
@@ -199,13 +243,13 @@ endsnippet
 priority 10
 context "math()"
 snippet "dd([a-zA-Z])" "d/dx / d/dy / ..." riA
-\\frac{\mathrm{d}$1}{\mathrm{d}`!p snip.rv=match.group(1)`$2} $3
+\\frac{\mathrm{d}$1}{\mathrm{d}`!p snip.rv=match.group(1)`$2}$3
 endsnippet
 
 priority 100
 context "math()"
 snippet "pdd([a-zA-Z])" "partial derivative of d/dx / d/dy / ..." riA
-\\frac{\partial $1}}{\partial `!p snip.rv=match.group(1)`$2} $3
+\\frac{\partial$1}{\partial `!p snip.rv=match.group(1)`$2}$3
 endsnippet
 
 #################################
@@ -227,14 +271,26 @@ snippet -+ "minus/plus" iA
 endsnippet
 
 context "math()"
+snippet == "equivalent" iA
+\\equiv
+endsnippet
+
+priority 10
+context "math()"
 snippet != "not equal" iA
 \\neq
+endsnippet
+
+priority 100
+context "math()"
+snippet =!= "not equivalent" iA
+\\not\\equiv
 endsnippet
 
 priority 10
 context "math()"
 snippet -> "approaches" iA
-\\rightarrow
+\\rightarrow{}
 endsnippet
 
 priority 100
@@ -245,8 +301,20 @@ endsnippet
 
 priority 100
 context "math()"
+snippet |-> "mapsto" iA
+\\mapsto
+endsnippet
+
+priority 100
+context "math()"
 snippet !-> "does not approach" iA
 \\nrightarrow
+endsnippet
+
+priority 200
+context "math()"
+snippet |--> "long mapsto" iA
+\\longmapsto
 endsnippet
 
 priority 200
@@ -258,7 +326,7 @@ endsnippet
 priority 10
 context "math()"
 snippet => "implies" iA
-\\Rightarrow
+\\Rightarrow{}
 endsnippet
 
 priority 100
@@ -364,8 +432,18 @@ snippet <-> "<->" iA
 endsnippet
 
 context "math()"
+snippet <--> "<-->" iA
+\\longleftrightarrow
+endsnippet
+
+context "math()"
 snippet <=> "iff" iA
 \\iff
+endsnippet
+
+context "math()"
+snippet ||| "|| x ||" iA
+\\lVert $1 \\rVert $2
 endsnippet
 
 context "math()"
@@ -387,6 +465,39 @@ endsnippet
 #################################
 
 context "math()"
+snippet s.t. "s.t. in math mode" i
+\\;\text{s.t.}\;
+endsnippet
+
+snippet degree "degree symbol" i
+\\textdegree
+endsnippet
+
+context "math()"
+snippet and "and logical operator" i
+\\wedge
+endsnippet
+
+context "math()"
+snippet or "or logical operator" i
+\\vee
+endsnippet
+
+snippet i.e. "i.e." iA
+i.e.\\
+endsnippet
+
+context "math()"
+snippet >= "greater than or equal to" iA
+\\ge{}
+endsnippet
+
+context "math()"
+snippet <= "less than or equal to" iA
+\\le{}
+endsnippet
+
+context "math()"
 snippet pmat "matrix with parenthesis" i
 \\begin{pmatrix}
 		$1
@@ -405,30 +516,34 @@ snippet uli "underline" i
 endsnippet
 
 snippet thi "thick(bold)" i
-\\textbf{$1} $2
+\\textbf{$1}$2
 endsnippet
 
 context "math()"
-snippet bo "bold (in maths environment)" i
+snippet bo "bold (in maths environment)" iA
 \\pmb{$1}$2
 endsnippet
 
-snippet ek "emphasize" i
-\\emph{$1} $2
+snippet es "emphasize" i
+\\emph{$1}$2
 endsnippet
 
 snippet te "Thick Emphasize (emph and bold)" i
-\\textbf{\\emph{$1}} $2
+\\textbf{\\emph{$1}}$2
+endsnippet
+
+snippet eu "emphasized underline" i
+\\emph{\\underline{$1}}$2
 endsnippet
 
 priority 10
 snippet tu "thick underline" i
-\\textbf{\\underline{$1}} $2
+\\textbf{\\underline{$1}}$2
 endsnippet
 
 priority 100
 snippet etu "emphasized thick underline" i
-\\underline{\\emph{\\textbf{$1}}} $2
+\\underline{\\emph{\\textbf{$1}}}$2
 endsnippet
 
 context "math()"
@@ -441,65 +556,116 @@ snippet '([A-Za-z])_(\d\d)' "auto subscript2" wrA
 `!p snip.rv = match.group(1)`_{`!p snip.rv = match.group(2)`$1}$2
 endsnippet
 
+priority 10
+context "math()"
 snippet __ "subscript" iA
 _{$1}$2
 endsnippet
 
+priority 100
+context "math()"
+snippet [__ "bracket subscript" iA
+{[$1]}_{$2}$3
+endsnippet
+
+priority 200
+context "math()"
+snippet l[__ "dynamic bracket subscript" iA
+{\\left[$1\\right]}_{$2}$3
+endsnippet
+
+priority 100
+context "math()"
+snippet (__  "paranthesis subscript" iA
+{($1)}_{$2}$3
+endsnippet
+
+priority 200
+context "math()"
+snippet l(__ "dynamic paranthesis subscript" iA
+{\\left($1\\right)}_{$2}$3
+endsnippet
+
+priority 100
+context "math()"
+snippet {__ "big paranthesis subscript" iA
+{\\{$1\\}}_{$2}$3
+endsnippet
+
+priority 200
+context "math()"
+snippet l{__ "dynamic big parenthesis subscript" iA
+{\\left\\{$1\\right\\}}_{$2}$3
+endsnippet
+
+context "math()"
 snippet lr( "() - height adjusted" iA
-\\left($1\\right) $2
+\\left($1\\right)$2
 endsnippet
 
+context "math()"
 snippet lr[ "[] - height adjusted" iA
-\\left[$1\\right] $2
+\\left[$1\\right]$2
 endsnippet
 
+context "math()"
 snippet lr{ "{} - height adjusted" iA
-\\left\\{$1\\right\\} $2
+\\left\\{$1\\right\\}$2
 endsnippet
 
+context "math()"
 snippet lr| "|| - height adjusted" iA
-\\left|$1\\right| $2
+\\left|$1\\right|$2
 endsnippet
 
+context "math()"
 snippet lr\| "|| || = height adjusted" iA
-\\left\|$1\\right\| $2
+\\left\|$1\\right\|$2
 endsnippet
 
+context "math()"
 snippet sr "square root" iA
 \\sqrt{$1}$2
 endsnippet
 
 priority 10
+context "math()"
 snippet tp "To the Power of (^)" iA
 ^{$1}$2
 endsnippet
 
 priority 100
+context "math()"
 snippet (tp "{()}^{}" iA
 {($1)}^{$2}$3
 endsnippet
 
 priority 100
+context "math()"
 snippet [tp "{[]}^{}" iA
 {[$1]}^{$2}$3
 endsnippet
 
 priority 100
+context "math()"
 snippet |tp "{||}^{}" iA
 {|$1|}^{$2}$3
 endsnippet
 
-priority 500
+priority 200
+context "math()"
 snippet l(tp "{()}^{} - height adjusted" iA
 {\\left($1\\right)}^{$2}$3
 endsnippet
 
-priority 500
+priority 200
+context "math()"
 snippet l[tp "{[]}^{} - height adjusted" iA
 {\\left[$1\\right]}^{$2}$3
 endsnippet
 
-priority 500
+priority 200
+context "math()"
 snippet l|tp "{||}^{} - height adjusted" iA
 {\\left|$1\\right|}^{$2}$3
 endsnippet
@@ -518,14 +684,38 @@ endsnippet
 
 priority 10
 context "math()"
-snippet hat "hat" iA
+snippet ht "hat" iA
 \\hat{$1}$2
 endsnippet
 
 priority 100
 context "math()"
-snippet "([a-zA-Z])hat" "hat" riA
+snippet "([a-zA-Z])ht" "hat" riA
 \\hat{`!p snip.rv=match.group(1)`}
+endsnippet
+
+priority 200
+context "math()"
+snippet wht "widehat" iA
+\\widehat{$1}$2
+endsnippet
+
+priority 300
+context "math()"
+snippet "([a-zA-Z])wht" "widehat" riA
+\\widehat{`!p snip.rv=match.group(1)`}
+endsnippet
+
+priority 10
+context "math()"
+snippet ~~ "tilde" iA
+\\tilde{$1}$2
+endsnippet
+
+priority 100
+context "math()"
+snippet "([a-zA-Z])~~" "tilde" riA
+\\tilde{`!p snip.rv=match.group(1)`}
 endsnippet
 
 context "math()"
@@ -539,8 +729,32 @@ snippet "([A-Z])bb" "\mathbb" riA
 endsnippet
 
 context "math()"
+snippet "([A-Za-z0-9])bf" "\mathbf" riA
+\\mathbf{`!p snip.rv=match.group(1)`}
+endsnippet
+
+context "math()"
+snippet "([A-Z])cr" "\mathscr" riA
+\\mathscr{`!p snip.rv=match.group(1)`}
+endsnippet
+
+context "math()"
+snippet code "\texttt" wA
+\\texttt{$1}$2
+endsnippet
+
+snippet code "\texttt" w
+\\texttt{$1}$2
+endsnippet
+
+context "math()"
 snippet dint "integral" wA
 \\int_{${1:-\infty}}^{${2:\infty}} $3
+endsnippet
+
+context "math()"
+snippet diint "double integral" wA
+\\iint_{${1:-\infty}}^{${2:\infty}} $3
 endsnippet
 
 context "math()"
@@ -551,6 +765,20 @@ endsnippet
 context "math()"
 snippet taylor "taylor" iA
 \\sum_{${1:n}=${2:0}}^{${3:\infty}} ${4:a_$1} ${5:(x-x_0)^$1}
+endsnippet
+
+context "math()"
+snippet ub "UnderBrace" i
+\\underbrace{$1}_\text{$2}$3
+endsnippet
+
+context "math()"
+snippet ob "OverBrace" i
+\\overbrace{$1}^\text{$2}$3
+endsnippet
+
+snippet \\\ "\ char" iA
+\\backslash
 endsnippet
 
 #################################
