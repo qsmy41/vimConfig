@@ -1,0 +1,3 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =1
+let g:netrw_dirhist_1='/Users/qsmy41/Documents/ICL/Assignments & Notes/Maths/notes/Calculus, Algebra & Analysis for JMC'
