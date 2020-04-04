@@ -18,12 +18,22 @@
 
 " => Main
 " Rename tabs to show tab# and # of viewports ---{{{
-set tabpagemax=15
-hi TabLineSel term=bold cterm=bold ctermfg=16 ctermbg=229
+set tabpagemax=20
+" The following is unnecessary because it is set in gruvbox
+" hi TabLineSel term=bold cterm=bold ctermfg=16 ctermbg=229
+" The second and third are the ones gives the black backgrouond for tab numbers
+" TabWinNumSel is the selected tab's window number, i.e. the number after '.'
 hi TabWinNumSel term=bold cterm=bold ctermfg=90 ctermbg=229
+" TabNumSel is the selected tab's number, i.e. the number before '.'
 hi TabNumSel term=bold cterm=bold ctermfg=16 ctermbg=229
-hi TabLine term=underline ctermfg=16 ctermbg=145
+
+" The following is unnecessary because it is set in gruvbox
+" hi TabLine term=underline ctermfg=16 ctermbg=145
+" The last two are for maintaining the black background
+" when switched to other tabs
+" TabWinNum is all the tab's window number, i.e. the numbers after '.'
 hi TabWinNum term=bold cterm=bold ctermfg=90 ctermbg=145
+" TabNum is all the tab's number, i.e. the numbers before '.'
 hi TabNum term=bold cterm=bold ctermfg=16 ctermbg=145
 if exists("+showtabline")
     function! MyTabLine()
@@ -62,8 +72,8 @@ if exists("+showtabline")
             if file == ''
                 let file = '[No Name]'
             endif
-            let s .= file
-            let s .= (i == t ? '%m' : '')
+            let s .= ' ' . file 
+            let s .= (i == t ? '%m ' : ' ')
             let i = i + 1
         endwhile
         let s .= '%T%#TabLineFill#%='
@@ -80,7 +90,7 @@ set autoindent
 set expandtab
 set tabstop=4
 set shiftwidth=4
-set textwidth=70
+set textwidth=78
 set showcmd
 " by default backspacing auto-indentation,
 " line breaks or previous edits are not allowed.
@@ -102,8 +112,6 @@ filetype plugin indent on
 "}}}
 
 " => Mappings
-" TODO: in normal mode mapping, implement <leader>tW,
-" to clear all the trailing spaces
 " General mappings ---{{{
 " Don't use <esc> to go back to normal mode!
 inoremap sd <esc>
@@ -123,7 +131,7 @@ let mapleader = "\<Space>"
 "}}}
 " Normal mode mappings ---{{{
 " for quick editing and sourcing of vimrc
-nnoremap <Leader>ev :tabnew ~/.vim/vimrc<cr>
+nnoremap <Leader>ev :vs ~/.vim/vimrc<cr>
 nnoremap <Leader>sv :source $MYVIMRC<cr>
 nnoremap <Leader>sc :source %<cr>
 
@@ -142,15 +150,24 @@ nnoremap H 0
 nnoremap L $
 nnoremap 0 H
 nnoremap $ L
+vnoremap H 0
+vnoremap L $
+vnoremap 0 H
+vnoremap $ L
 
 " highlight trailing whitespaces
 " \zs: It matches anything, marks the start of the match
 " \ze: It matches anything, marks the end of the match
+" use <leader>ds to delete all trailing spaces
 nnoremap <leader>es :execute "normal! mq/\\v\\S\\zs\\s+$\r`q"<cr>
 
 " quick going through quickfix matches
 nnoremap <leader>n :cnext<cr>
-nnoremap <leader>p :cnext<cr>
+nnoremap <leader>p :cprevious<cr>
+
+" go to the directory where the current file is in
+" and prepare to open a file in the vertically split window.
+nnoremap gb :vs %:h<cr>
 
 " fun with vim regex: match an email address
 " verymagic mode
@@ -180,6 +197,7 @@ vnoremap s :/.*/
 onoremap H 0
 onoremap L $
 " movement of change the content of the next/last parenthesis
+" not recommended to use because new visual selection is invoked
 " /r is an escape sequence meaning "carriage return",
 " equivalent to pressing the return key
 onoremap in( :<c-u>execute "normal! /(\rvi("<cr>
@@ -235,6 +253,8 @@ augroup END
 augroup vimFiles
     autocmd!
     autocmd FileType vim setlocal foldmethod=marker
+    autocmd FileType help wincmd L | vertical resize 78
+    autocmd FileType vim nnoremap <buffer> <localleader>c I"<space><esc>
 augroup END
 "}}}
 " Python file settings ---{{{
@@ -253,7 +273,7 @@ augroup pythonFiles
     " example of writing a snippet using vimscript
     au FileType python :iabbrev <buffer> iff if:<left>
     " commenting snippet for python
-    au FileType python nnoremap <buffer> <localleader>c    I#<space><esc>
+    au FileType python nnoremap <buffer> <localleader>c I#<space><esc>
 augroup END
 "}}}
 " Latex file settings ---{{{
@@ -266,6 +286,7 @@ augroup latexFiles
                 \ setlocal expandtab        |
                 \ setlocal autoindent       |
                 \ setlocal conceallevel=2
+    autocmd FileType tex nnoremap <buffer> <localleader>c I%<space><esc>
 augroup END
 "}}}
 " HTML file settings ---{{{
@@ -376,6 +397,12 @@ let g:tex_flavor='latex'
 let g:vimtex_quickfix_mode=0
 let g:tex_conceal='abdgm'
 "}}}
+" Fugitive settings ---{{{
+augroup FugitiveSettings
+    au!
+    " autocmd BufReadPost fugitive://* set bufhidden=delete
+augroup END
+
 colorscheme gruvbox
 """"""""""""""""""""""""""""""
 " ==> End Plugins and settings
