@@ -351,6 +351,8 @@ Plug 'neoclide/coc.nvim', {'branch' : 'release'}
 Plug 'lervag/vimtex'
 " further latex conceal level support
 Plug 'KeitaNakamura/tex-conceal.vim', {'for': 'tex'}
+" C language plugin
+Plug 'vim-scripts/c.vim'
 
 call plug#end()
 "}}}
@@ -400,6 +402,10 @@ let g:tex_flavor='latex'
 " let g:vimtex_view_method='mupdf'
 let g:vimtex_quickfix_mode=0
 let g:tex_conceal='abdgm'
+"}}}
+" C-vim settings ---{{{
+let  g:C_UseTool_cmake   = 'yes'
+let  g:C_UseTool_doxygen = 'yes'
 "}}}
 
 colorscheme gruvbox
