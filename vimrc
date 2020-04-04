@@ -161,9 +161,13 @@ vnoremap $ L
 " use <leader>ds to delete all trailing spaces
 nnoremap <leader>es :execute "normal! mq/\\v\\S\\zs\\s+$\r`q"<cr>
 
-" quick going through quickfix matches
-nnoremap <leader>n :cnext<cr>
-nnoremap <leader>p :cprevious<cr>
+" quick going through quickfix matches and toggle them
+nnoremap ]q :cnext<cr>
+nnoremap [q :cprev<cr>
+nnoremap ]Q :clast<cr>
+nnoremap [Q :cfirst<cr>
+nnoremap [o :copen<cr>
+nnoremap ]o :cclose<cr>
 
 " go to the directory where the current file is in
 " and prepare to open a file in the vertically split window.
@@ -397,11 +401,6 @@ let g:tex_flavor='latex'
 let g:vimtex_quickfix_mode=0
 let g:tex_conceal='abdgm'
 "}}}
-" Fugitive settings ---{{{
-augroup FugitiveSettings
-    au!
-    " autocmd BufReadPost fugitive://* set bufhidden=delete
-augroup END
 
 colorscheme gruvbox
 """"""""""""""""""""""""""""""
