@@ -361,6 +361,8 @@ Plug 'vim-scripts/c.vim'
 " File search in vim and path to the main fzf
 Plug 'junegunn/fzf.vim'
 Plug '/usr/local/opt/fzf'
+" Plugin for start screen
+Plug 'mhinz/vim-startify'
 
 call plug#end()
 "}}}
@@ -468,6 +470,33 @@ let g:fzf_colors =
   \ 'marker':  ['fg', 'Keyword'],
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
+"}}}
+" Startify settings ---{{{
+let g:startify_files_number = 8
+let g:startify_bookmarks = [ 
+            \ {'z': '~/.zshrc'},
+            \ {'x': '~/.tmux.conf'},
+            \ {'c': '~/.vim/vimrc'}]
+let g:ascii = [
+            \ '     O            /                       \                                   ',
+            \ '                /X/                       \X\                                 ',
+            \ '       O       |XX\         _____         /XX|                                ',
+            \ '            o  |XXX\     _/       \_     /XXX|___________                     ',
+            \ '                \XXXXXXX             XXXXXXX/            \\\                  ',
+            \ '                  \XXXX    /     \    XXXXX/                \\\               ',
+            \ '                       |   0     0   |                         \              ',
+            \ '                        |           |                           \         //  ',
+            \ '                         \         /                            |________//   ',
+            \ '                          \       /                             |             ',
+            \ '                           | O_O | \                            |             ',
+            \ '                            \ _ /   \________________           |             ',
+            \ '                                       | |  | |      \         /              ',
+            \ '                                       / |  / |       \______/                ',
+            \ '                                       \ |  \ |        \ |  \ |               ',
+            \ '                                     __| |__| |      __| |__| |               ',
+            \ '                                     |___||___|      |___||___|               ',
+            \ ]
+let g:startify_custom_header = startify#fortune#boxed() + g:ascii 
 "}}}
 
 colorscheme gruvbox
