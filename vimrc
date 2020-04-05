@@ -135,6 +135,9 @@ nnoremap <Leader>ev :vs ~/.vim/vimrc<cr>
 nnoremap <Leader>sv :source $MYVIMRC<cr>
 nnoremap <Leader>sc :source %<cr>
 
+" quick editing ultisnips
+nnoremap <Leader>sn :UltiSnipsEdit<cr>
+
 " turn off highlighting when not searching
 nnoremap <Leader><space> :noh<return><esc>
 
@@ -335,7 +338,9 @@ Plugin 'scrooloose/nerdtree'
 " snippets for different languages/filetype
 Plugin 'sirver/ultisnips'
 " Snippets are separated from the engine. Add this if you want them:
-Plugin 'honza/vim-snippets'
+" Plugin 'honza/vim-snippets'
+" vim file explorer
+Plugin 'vifm/vifm.vim'
 
 call vundle#end()
 "}}}
@@ -353,6 +358,9 @@ Plug 'lervag/vimtex'
 Plug 'KeitaNakamura/tex-conceal.vim', {'for': 'tex'}
 " C language plugin
 Plug 'vim-scripts/c.vim'
+" File search in vim and path to the main fzf
+Plug 'junegunn/fzf.vim'
+Plug '/usr/local/opt/fzf'
 
 call plug#end()
 "}}}
@@ -383,17 +391,21 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " move nerdtree to the right
 let g:NERDTreeWinPos = "right"
 "}}}
-" COC settings ---{{{
+" COC settings ---{{{ 
 " Use <C-j> and <C-k> to navigate the completion list
-" inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
-" inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "\<C-k>"
+inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
+inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "\<C-k>"
+
+" ":CocList extensions" to look up installed coc extensions
+" ":CocInstall xxx" to install desired extensions/LSPs
+
 "}}}
 " ultisnips settings ---{{{
 " the following four settings are just not working...
 let g:UltiSnipsExpandTrigger = "<tab>"
 let g:UltiSnipsListSnippets = "<c-tab>"
-let g:UltiSnipsJumpForwardTrigger = "<c-j>"
-let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
+let g:UltiSnipsJumpForwardTrigger = "<c-l>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-h>"
 " :UltiSnipsEdit split window mode - new tab
 let g:UltiSnipsEditSplit = "tabdo"
 "}}}
@@ -404,8 +416,58 @@ let g:vimtex_quickfix_mode=0
 let g:tex_conceal='abdgm'
 "}}}
 " C-vim settings ---{{{
-let  g:C_UseTool_cmake   = 'yes'
-let  g:C_UseTool_doxygen = 'yes'
+let g:C_UseTool_cmake   = 'yes'
+let g:C_UseTool_doxygen = 'yes'
+"}}}
+" fzf settings ---{{{
+
+" For syntax highlighting of the preview window, "brew install bat"
+" Then install gruvbox theme following the instructions on:
+" https://github.com/sharkdp/bat#adding-new-themes
+" with git clone https://github.com/ethe/gruvbox-sublime
+
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+let g:fzf_command_prefix = 'Fzf'
+
+" An action can be a reference to a function that processes selected lines
+function! s:build_quickfix_list(lines)
+  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+  copen
+  cc
+endfunction
+
+" This is the default extra key bindings
+let g:fzf_action = {
+  \ 'ctrl-q': function('s:build_quickfix_list'),
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
+" Default fzf layout
+" - down / up / left / right
+let g:fzf_layout = { 'down': '~40%' }
+
+" quick invocation of fzf
+nnoremap <leader>p :FzfFiles %:h<cr>
+" Always enable preview window on the right with 60% width
+let g:fzf_preview_window = 'right:60%'
+" Customize fzf colors to match your color scheme
+" - fzf#wrap translates this to a set of `--color` options
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
 "}}}
 
 colorscheme gruvbox

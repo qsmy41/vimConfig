@@ -5,6 +5,8 @@ This vimrc is geared towards python programming and latex editing on Mac. Main p
 3. code completion: coc
 4. snippets: ultisnips
 5. latex: vimtex
+6. file search: fzf
+7. file explorer: Vifm
 
 # Installation
 
