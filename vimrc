@@ -1,3 +1,8 @@
+" Problem:
+" 1. coc cannot retrieve vim symbols,
+" therefore vista.vim does not work.
+" 2. debugging tools?
+" checkout vimspector and possibly others next time.
 
 
 " ===========================
@@ -72,7 +77,7 @@ if exists("+showtabline")
             if file == ''
                 let file = '[No Name]'
             endif
-            let s .= ' ' . file 
+            let s .= ' ' . file
             let s .= (i == t ? '%m ' : ' ')
             let i = i + 1
         endwhile
@@ -331,14 +336,10 @@ Plugin 'morhetz/gruvbox'
 Plugin 'vim-airline/vim-airline'
 " themes for vim-airline
 Plugin 'vim-airline/vim-airline-themes'
-" Asynchronous Lint Engine for syntax checking nad semnantic errors
+" Asynchronous Linting Engine for syntax checking nad semnantic errors
 Plugin 'dense-analysis/ale'
-" 'vim' finder
-Plugin 'scrooloose/nerdtree'
 " snippets for different languages/filetype
 Plugin 'sirver/ultisnips'
-" Snippets are separated from the engine. Add this if you want them:
-" Plugin 'honza/vim-snippets'
 " vim file explorer
 Plugin 'vifm/vifm.vim'
 
@@ -350,19 +351,29 @@ call vundle#end()
 " :PlugUpdate to update all plugins
 call plug#begin('~/.vim/plugged')
 
-" Conquer of Completion
+" Conquer of Completion: Intellisense engine
 Plug 'neoclide/coc.nvim', {'branch' : 'release'}
 " latex for vim
 Plug 'lervag/vimtex'
 " further latex conceal level support
 Plug 'KeitaNakamura/tex-conceal.vim', {'for': 'tex'}
 " C language plugin
-Plug 'vim-scripts/c.vim'
+" Plug 'vim-scripts/c.vim'
 " File search in vim and path to the main fzf
 Plug 'junegunn/fzf.vim'
 Plug '/usr/local/opt/fzf'
-" Plugin for start screen
+" start screen plugin
 Plug 'mhinz/vim-startify'
+" viewing and searching LSP symbols, tags
+Plug 'liuchengxu/vista.vim'
+" LSP for vimscript
+" Plug 'prabirshrestha/async.vim'
+" Plug 'prabirshrestha/vim-lsp'
+" Plug 'mattn/vim-lsp-settings'
+" file explorer
+Plug 'Shougo/defx.nvim'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
 
 call plug#end()
 "}}}
@@ -386,21 +397,13 @@ autocmd QuitPre * if empty(&bt) | lclose | endif
 " airline theme
 let g:airline_theme = 'base16_gruvbox_dark_hard'
 "}}}
-" NERDTree settings ---{{{
-nnoremap <Leader>tt :NERDTreeToggle<CR>
-" NERDTree window closes together with the main window
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" move nerdtree to the right
-let g:NERDTreeWinPos = "right"
-"}}}
-" COC settings ---{{{ 
+" COC settings ---{{{
 " Use <C-j> and <C-k> to navigate the completion list
 inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
 inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "\<C-k>"
 
 " ":CocList extensions" to look up installed coc extensions
 " ":CocInstall xxx" to install desired extensions/LSPs
-
 "}}}
 " ultisnips settings ---{{{
 " the following four settings are just not working...
@@ -420,6 +423,15 @@ let g:tex_conceal='abdgm'
 " C-vim settings ---{{{
 let g:C_UseTool_cmake   = 'yes'
 let g:C_UseTool_doxygen = 'yes'
+"}}}
+" Vifm settings ---{{{
+" Color scheme setting:
+" follow the instructions on: https://wiki.vifm.info/index.php/Color_schemes
+" to set up ~/.vifm accordingly
+" search for the desired color scheme, like gruvbox, and then copy it.
+
+" fw: File Window
+nnoremap <leader>fw :Vifm ~/ %:h<cr>
 "}}}
 " fzf settings ---{{{
 
@@ -451,7 +463,7 @@ let g:fzf_action = {
 let g:fzf_layout = { 'down': '~40%' }
 
 " quick invocation of fzf
-nnoremap <leader>p :FzfFiles %:h<cr>
+nnoremap <leader>ff :FzfFiles %:h<cr>
 " Always enable preview window on the right with 60% width
 let g:fzf_preview_window = 'right:60%'
 " Customize fzf colors to match your color scheme
@@ -473,7 +485,7 @@ let g:fzf_colors =
 "}}}
 " Startify settings ---{{{
 let g:startify_files_number = 8
-let g:startify_bookmarks = [ 
+let g:startify_bookmarks = [
             \ {'z': '~/.zshrc'},
             \ {'x': '~/.tmux.conf'},
             \ {'c': '~/.vim/vimrc'}]
@@ -496,7 +508,158 @@ let g:ascii = [
             \ '                                     __| |__| |      __| |__| |               ',
             \ '                                     |___||___|      |___||___|               ',
             \ ]
-let g:startify_custom_header = startify#fortune#boxed() + g:ascii 
+let g:startify_custom_header = startify#fortune#boxed() + g:ascii
+"}}}
+" Vista settings ---{{{
+nnoremap <leader>vs :Vista!!<cr>
+nnoremap <leader>vf :Vista finder<cr>
+
+function! NearestMethodOrFunction() abort
+return get(b:, 'vista_nearest_method_or_function', '')
+endfunction
+
+set statusline+=%{NearestMethodOrFunction()}
+
+" By default vista.vim never run if you don't call it explicitly.
+"
+" If you want to show the nearest function in your statusline automatically,
+" you can add the following line to your vimrc
+autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
+
+" How each level is indented and what to prepend.
+" This could make the display more compact or more spacious.
+" e.g., more compact: ["▸ ", ""]
+" Note: this option only works the LSP executives, doesn't work for `:Vista ctags`.
+let g:vista_icon_indent = ["╰─▸ ", "├─▸ "]
+
+" Executive used when opening vista sidebar without specifying it.
+" See all the avaliable executives via `:echo g:vista#executives`.
+let g:vista_default_executive = 'coc'
+
+" let g:vista_finder_alternative_executives = ['coc']
+
+" Set the executive for some filetypes explicitly. Use the explicit executive
+" instead of the default one for these filetypes when using `:Vista` without
+" specifying the executive.
+let g:vista_executive_for = {
+\ 'cpp': 'coc',
+\ 'php': 'vim_lsp',
+\ 'vim': 'coc',
+\ }
+
+" Declare the command including the executable and options used to generate ctags output
+" for some certain filetypes.The file path will be appened to your custom command.
+" For example:
+let g:vista_ctags_cmd = {
+  \ 'haskell': 'hasktags -x -o - -c',
+  \ }
+
+" To enable fzf's preview window set g:vista_fzf_preview.
+" The elements of g:vista_fzf_preview will be passed as arguments to fzf#vim#with_preview()
+" For example:
+let g:vista_fzf_preview = ['right:50%']
+
+" Ensure you have installed some decent font to show these pretty symbols, then you can enable icon for the kind.
+let g:vista#renderer#enable_icon = 1
+
+" The default icons can't be suitable for all the filetypes, you can extend it as you wish.
+let g:vista#renderer#icons = {
+\   "function": "\uf794",
+\   "variable": "\uf71b",
+\  }
+"}}}
+" Defx settings ---{{{
+
+nnoremap <leader>fe :Defx -split=vertical -winwidth=30 -direction=topleft<cr>
+" update Defx as files are updated
+autocmd BufWritePost * call defx#redraw()
+
+autocmd FileType defx call s:defx_my_settings()
+function! s:defx_my_settings() abort
+  " Define mappings
+  nnoremap <silent><buffer><expr> <CR>
+  \ defx#do_action('open')
+  nnoremap <silent><buffer><expr> c
+  \ defx#do_action('copy')
+  nnoremap <silent><buffer><expr> m
+  \ defx#do_action('move')
+  nnoremap <silent><buffer><expr> p
+  \ defx#do_action('paste')
+  nnoremap <silent><buffer><expr> l
+  \ defx#do_action('open')
+  nnoremap <silent><buffer><expr> <C-h> '<C-w>h'
+  nnoremap <silent><buffer><expr> <C-l> '<C-w>l'
+  nnoremap <silent><buffer><expr> E
+  \ defx#do_action('open', 'vsplit')
+  nnoremap <silent><buffer><expr> P
+  \ defx#do_action('open', 'pedit')
+  nnoremap <silent><buffer><expr> o
+  \ defx#do_action('open_or_close_tree')
+  nnoremap <silent><buffer><expr> K
+  \ defx#do_action('new_directory')
+  nnoremap <silent><buffer><expr> N
+  \ defx#do_action('new_file')
+  nnoremap <silent><buffer><expr> M
+  \ defx#do_action('new_multiple_files')
+  nnoremap <silent><buffer><expr> C
+  \ defx#do_action('toggle_columns',
+  \                'mark:indent:icon:filename:type:size:time')
+  nnoremap <silent><buffer><expr> > 
+  \ defx#do_action('resize', defx#get_context().winwidth + 5)
+  nnoremap <silent><buffer><expr> < 
+  \ defx#do_action('resize', defx#get_context().winwidth - 5)
+  nnoremap <silent><buffer><expr> S
+  \ defx#do_action('toggle_sort', 'time')
+  nnoremap <silent><buffer><expr> d
+  \ defx#do_action('remove')
+  nnoremap <silent><buffer><expr> r
+  \ defx#do_action('rename')
+  nnoremap <silent><buffer><expr> !
+  \ defx#do_action('execute_command')
+  nnoremap <silent><buffer><expr> x
+  \ defx#do_action('execute_system')
+  nnoremap <silent><buffer><expr> yy
+  \ defx#do_action('yank_path')
+  nnoremap <silent><buffer><expr> .
+  \ defx#do_action('toggle_ignored_files')
+  nnoremap <silent><buffer><expr> ;
+  \ defx#do_action('repeat')
+  nnoremap <silent><buffer><expr> h
+  \ defx#do_action('cd', ['..'])
+  nnoremap <silent><buffer><expr> ~
+  \ defx#do_action('cd')
+  nnoremap <silent><buffer><expr> q
+  \ defx#do_action('quit')
+  nnoremap <silent><buffer><expr> <Space>
+  \ defx#do_action('toggle_select') . 'j'
+  nnoremap <silent><buffer><expr> *
+  \ defx#do_action('toggle_select_all')
+  nnoremap <silent><buffer><expr> j
+  \ line('.') == line('$') ? 'gg' : 'j'
+  nnoremap <silent><buffer><expr> k
+  \ line('.') == 1 ? 'G' : 'k'
+  nnoremap <silent><buffer><expr> <C-r>
+  \ defx#do_action('redraw')
+  nnoremap <silent><buffer><expr> <C-g>
+  \ defx#do_action('print')
+  nnoremap <silent><buffer><expr> cd
+  \ defx#do_action('change_vim_cwd')
+	call defx#custom#column('icon', {
+	      \ 'directory_icon': '▸',
+	      \ 'opened_icon': '▾',
+	      \ 'root_icon': ' ',
+	      \ })
+
+	call defx#custom#column('filename', {
+	      \ 'min_width': 40,
+	      \ 'max_width': 40,
+	      \ })
+
+	call defx#custom#column('mark', {
+	      \ 'readonly_icon': '✗',
+	      \ 'selected_icon': '✓',
+	      \ })
+endfunction
 "}}}
 
 colorscheme gruvbox

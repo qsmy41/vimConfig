@@ -6,7 +6,9 @@ This vimrc is geared towards python programming and latex editing on Mac. Main p
 4. snippets: ultisnips
 5. latex: vimtex
 6. file search: fzf
-7. file explorer: Vifm
+7. file explorer: Vifm + Defx
+8. LSP symbols/tags viewer/finder: Vista
+9. vim start screen: Startify
 
 # Installation
 
