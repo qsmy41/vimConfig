@@ -472,6 +472,7 @@ nnoremap <leader>gr :Gremove<cr>
 nnoremap <leader>gm :Gmove
 nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gl :Glog<cr>
+nnoremap <leader>gp :Gpush<cr>
 "}}}
 " fzf settings ---{{{
 " in command line "brew install the_silver_searcher"
