@@ -9,6 +9,9 @@ This vimrc is geared towards python programming and latex editing on Mac. Main p
 7. file explorer: Vifm + Defx
 8. LSP symbols/tags viewer/finder: Vista
 9. vim start screen: Startify
+10. git integration: fugitive
+11. quick navigation: Easymotion
+12. indication of changes managed by VCS: Signify
 
 # Installation
 
