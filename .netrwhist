@@ -1,4 +1,5 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =2
+let g:netrw_dirhistcnt =3
+let g:netrw_dirhist_3='/Users/qsmy41/.vim/pack/tpope/start/fugitive'
 let g:netrw_dirhist_2='/Users/qsmy41/.vim'
 let g:netrw_dirhist_1='/Users/qsmy41/Documents/ICL/Assignments & Notes/Maths/notes/Calculus, Algebra & Analysis for JMC'

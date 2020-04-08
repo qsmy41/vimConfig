@@ -144,7 +144,7 @@ $0
 endsnippet
 
 snippet list "list" b
-\begin{enumerate}[label = (\\$1*)]
+\begin{enumerate}[label = (\\${1:roman}*)]
     \item $2
 \end{enumerate}
 $0
@@ -185,12 +185,12 @@ snippet \[ "\[ / \]" iA
 \]$0
 endsnippet
 
-# if $2 is replaced with $0, the second '$' would be
-# overwritten when jumping between entries
-# immediately having `!p so that $2 is not in new line.
+# Why t[2] and t[2][0]?
 snippet mk "InlineMath" wA
-$${1}$`!pif t[2] and t[2][0] not in [',', '.', '?', '-', ' ']:
-	snip.rv = ' 'else:
+$${1}$`!p
+if t[2] and t[2][0] not in [',', '.', '?', '-', ' ']:
+	snip.rv = ' '
+else:
 	snip.rv = ''
 `$2
 endsnippet

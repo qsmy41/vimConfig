@@ -158,10 +158,9 @@ nnoremap H 0
 nnoremap L $
 nnoremap 0 H
 nnoremap $ L
-vnoremap H 0
-vnoremap L $
-vnoremap 0 H
-vnoremap $ L
+
+" yank to the system clipboard
+nnoremap <leader>y "+y
 
 " highlight trailing whitespaces
 " \zs: It matches anything, marks the start of the match
@@ -201,6 +200,15 @@ nnoremap theEmail /\v([a-zA-Z0-9_\.\-])+\@([a-zA-Z0-9_\-])+(\.([a-zA-Z]){,5\}){,
 " and add chars to the front and back of it.
 " obtain the selected text by using '\0'.
 vnoremap s :/.*/
+
+" go to start and end of line in visual mode
+vnoremap H 0
+vnoremap L $
+vnoremap 0 H
+vnoremap $ L
+
+" yank to system clipboard
+vnoremap <leader>y "+y
 "}}}
 " TODO: The operator-pending mappings for brackets should be
 " re-written so that last visual selection is not changed and
@@ -359,6 +367,8 @@ Plug 'lervag/vimtex'
 Plug 'KeitaNakamura/tex-conceal.vim', {'for': 'tex'}
 " C language plugin
 " Plug 'vim-scripts/c.vim'
+" Git integration with vim
+Plug 'tpope/vim-fugitive'
 " File search in vim and path to the main fzf
 Plug 'junegunn/fzf.vim'
 Plug '/usr/local/opt/fzf'
@@ -366,10 +376,6 @@ Plug '/usr/local/opt/fzf'
 Plug 'mhinz/vim-startify'
 " viewing and searching LSP symbols, tags
 Plug 'liuchengxu/vista.vim'
-" LSP for vimscript
-" Plug 'prabirshrestha/async.vim'
-" Plug 'prabirshrestha/vim-lsp'
-" Plug 'mattn/vim-lsp-settings'
 " file explorer
 Plug 'Shougo/defx.nvim'
 Plug 'roxma/nvim-yarp'
@@ -413,12 +419,31 @@ let g:UltiSnipsJumpForwardTrigger = "<c-l>"
 let g:UltiSnipsJumpBackwardTrigger = "<c-h>"
 " :UltiSnipsEdit split window mode - new tab
 let g:UltiSnipsEditSplit = "tabdo"
+nnoremap <leader>es :UltiSnipsEdit<cr>
 "}}}
 " vimtex settings ---{{{
 let g:tex_flavor='latex'
-" let g:vimtex_view_method='mupdf'
 let g:vimtex_quickfix_mode=0
 let g:tex_conceal='abdgm'
+
+" it should be vimtex_view_method, but that doesn't work
+let g:vimtex_view_general_viewer='zathura'
+
+" the following only works when vimtex_view_method is set to zathura
+" instead of the current vimtex_view_general_viewer.
+" let g:vimtex_view_zathura_hook_view='ViewerPosition'
+" function! ViewerPosition() abort dict
+"       echom 'See what I am:' string(self)
+"   " call self.move('0 0')
+"   " call self.resize('1600 876')
+" endfunction
+
+" For synctex forward
+" au FileType tex nmap <Leader>f :call SyncTexForward()<CR>
+" function! SyncTexForward()
+"     let execstr = "silent !zathura --synctex-forward ".line(".").":".col(".").":%:p %:p:r.pdf &"
+"     exec execstr
+" endfunction
 "}}}
 " C-vim settings ---{{{
 let g:C_UseTool_cmake   = 'yes'
@@ -431,9 +456,58 @@ let g:C_UseTool_doxygen = 'yes'
 " search for the desired color scheme, like gruvbox, and then copy it.
 
 " fw: File Window
-nnoremap <leader>fw :Vifm ~/ %:h<cr>
+" nnoremap <leader>fw :Vifm ~/ %:h<cr>
+"}}}
+" fugitive settings ---{{{
+nnoremap <leader>gs :Gstatus<cr>
+nnoremap <leader>gd :Gvdiffsplit<cr>
+nnoremap <leader>gw :Gwrite<cr>
+nnoremap <leader>gr :Gread<cr>
+nnoremap <leader>gc :Gcommit<cr>
+nnoremap <leader>gr :Gremove<cr>
+nnoremap <leader>gm :Gmove
+nnoremap <leader>gb :Gblame<cr>
+nnoremap <leader>gl :Glog<cr>
 "}}}
 " fzf settings ---{{{
+" in command line "brew install the_silver_searcher"
+" so that :FzfAg can be used
+nnoremap <leader>ff :FzfFiles %:h
+nnoremap <leader>fa :FzfAg<cr>
+nnoremap <leader>fg :FzfGFiles<cr>
+nnoremap <leader>fb :FzfBuffers<cr>
+nnoremap <leader>fl :FzfLines<cr>
+nnoremap <leader>fw :FzfWindows<cr>
+nnoremap <leader>fs :FzfSnippets<cr>
+nnoremap <leader>fc :FzfCommits<cr>
+nnoremap <leader>ft :FzfTags<cr>
+" non-conventional mappings
+nnoremap <leader>fd :FzfHelptags<cr>
+nnoremap <leader>fm :FzfMarks<cr>
+nnoremap <leader>f, :FzfMaps<cr>
+" search for opened files
+nnoremap <leader>fh :FzfHistory<cr>
+" search for commands
+nnoremap <leader>f: :FzfHistory:<cr>
+" search for search histories
+nnoremap <leader>f/ :FzfHistory/<cr>
+" for searching system files
+nnoremap <leader>fn :FzfLocate 
+
+" Change branches with Gbranch
+fun! s:change_branch(e)
+    let res = system("git checkout ", a:e)
+    " reload the current file
+    :e!
+    :AirlineRefresh
+    echom "Change branch to" . a:e
+endfun
+command! Gbranch call fzf#run({
+            \ 'source': 'git branch',
+            \ 'sink': function('<SID>change_branch'),
+            \ 'option': '-m',
+            \ 'down': '20%'
+            \ })
 
 " For syntax highlighting of the preview window, "brew install bat"
 " Then install gruvbox theme following the instructions on:
@@ -462,8 +536,6 @@ let g:fzf_action = {
 " - down / up / left / right
 let g:fzf_layout = { 'down': '~40%' }
 
-" quick invocation of fzf
-nnoremap <leader>ff :FzfFiles %:h<cr>
 " Always enable preview window on the right with 60% width
 let g:fzf_preview_window = 'right:60%'
 " Customize fzf colors to match your color scheme
@@ -511,6 +583,9 @@ let g:ascii = [
 let g:startify_custom_header = startify#fortune#boxed() + g:ascii
 "}}}
 " Vista settings ---{{{
+" currently coc-vimlsp does not support symbol extraction
+" so vimscipts cannot use visa
+
 nnoremap <leader>vs :Vista!!<cr>
 nnoremap <leader>vf :Vista finder<cr>
 
@@ -541,11 +616,11 @@ let g:vista_default_executive = 'coc'
 " Set the executive for some filetypes explicitly. Use the explicit executive
 " instead of the default one for these filetypes when using `:Vista` without
 " specifying the executive.
-let g:vista_executive_for = {
-\ 'cpp': 'coc',
-\ 'php': 'vim_lsp',
-\ 'vim': 'coc',
-\ }
+" let g:vista_executive_for = {
+" \ 'cpp': 'coc',
+" \ 'php': 'vim_lsp',
+" \ 'vim': 'coc',
+" \ }
 
 " Declare the command including the executable and options used to generate ctags output
 " for some certain filetypes.The file path will be appened to your custom command.
@@ -577,73 +652,44 @@ autocmd BufWritePost * call defx#redraw()
 autocmd FileType defx call s:defx_my_settings()
 function! s:defx_my_settings() abort
   " Define mappings
-  nnoremap <silent><buffer><expr> <CR>
-  \ defx#do_action('open')
-  nnoremap <silent><buffer><expr> c
-  \ defx#do_action('copy')
-  nnoremap <silent><buffer><expr> m
-  \ defx#do_action('move')
-  nnoremap <silent><buffer><expr> p
-  \ defx#do_action('paste')
-  nnoremap <silent><buffer><expr> l
-  \ defx#do_action('open')
+  nnoremap <silent><buffer><expr> <CR>  defx#do_action('open')
+  nnoremap <silent><buffer><expr> c     defx#do_action('copy')
+  nnoremap <silent><buffer><expr> m     defx#do_action('move')
+  nnoremap <silent><buffer><expr> p     defx#do_action('paste')
+  nnoremap <silent><buffer><expr> l     defx#do_action('open')
+  nnoremap <silent><buffer><expr> E     defx#do_action('open', 'vsplit')
+  nnoremap <silent><buffer><expr> P     defx#do_action('open', 'pedit')
+  nnoremap <silent><buffer><expr> o     defx#do_action('open_or_close_tree')
+  nnoremap <silent><buffer><expr> K     defx#do_action('new_directory')
+  nnoremap <silent><buffer><expr> N     defx#do_action('new_file')
+  nnoremap <silent><buffer><expr> M     defx#do_action('new_multiple_files')
+  nnoremap <silent><buffer><expr> S     defx#do_action('toggle_sort', 'time')
+  nnoremap <silent><buffer><expr> d     defx#do_action('remove')
+  nnoremap <silent><buffer><expr> r     defx#do_action('rename')
+  nnoremap <silent><buffer><expr> !     defx#do_action('execute_command')
+  nnoremap <silent><buffer><expr> x     defx#do_action('execute_system')
+  nnoremap <silent><buffer><expr> yy    defx#do_action('yank_path')
+  nnoremap <silent><buffer><expr> .     defx#do_action('toggle_ignored_files')
+  nnoremap <silent><buffer><expr> ;     defx#do_action('repeat')
+  nnoremap <silent><buffer><expr> h     defx#do_action('cd', ['..'])
+  nnoremap <silent><buffer><expr> ~     defx#do_action('cd')
+  nnoremap <silent><buffer><expr> q     defx#do_action('quit')
+  nnoremap <silent><buffer><expr> *     defx#do_action('toggle_select_all')
+  nnoremap <silent><buffer><expr> j     line('.') == line('$') ? 'gg' : 'j'
+  nnoremap <silent><buffer><expr> k     line('.') == 1 ? 'G' : 'k'
+  nnoremap <silent><buffer><expr> <C-r> defx#do_action('redraw')
+  nnoremap <silent><buffer><expr> <C-g> defx#do_action('print')
+  nnoremap <silent><buffer><expr> cd    defx#do_action('change_vim_cwd')
   nnoremap <silent><buffer><expr> <C-h> '<C-w>h'
   nnoremap <silent><buffer><expr> <C-l> '<C-w>l'
-  nnoremap <silent><buffer><expr> E
-  \ defx#do_action('open', 'vsplit')
-  nnoremap <silent><buffer><expr> P
-  \ defx#do_action('open', 'pedit')
-  nnoremap <silent><buffer><expr> o
-  \ defx#do_action('open_or_close_tree')
-  nnoremap <silent><buffer><expr> K
-  \ defx#do_action('new_directory')
-  nnoremap <silent><buffer><expr> N
-  \ defx#do_action('new_file')
-  nnoremap <silent><buffer><expr> M
-  \ defx#do_action('new_multiple_files')
+  nnoremap <silent><buffer><expr> <Space> defx#do_action('toggle_select') . 'j'
   nnoremap <silent><buffer><expr> C
-  \ defx#do_action('toggle_columns',
-  \                'mark:indent:icon:filename:type:size:time')
-  nnoremap <silent><buffer><expr> > 
+  \ defx#do_action('toggle_columns', 'mark:indent:icon:filename:type:size:time')
+  nnoremap <silent><buffer><expr> >
   \ defx#do_action('resize', defx#get_context().winwidth + 5)
-  nnoremap <silent><buffer><expr> < 
+  nnoremap <silent><buffer><expr> <
   \ defx#do_action('resize', defx#get_context().winwidth - 5)
-  nnoremap <silent><buffer><expr> S
-  \ defx#do_action('toggle_sort', 'time')
-  nnoremap <silent><buffer><expr> d
-  \ defx#do_action('remove')
-  nnoremap <silent><buffer><expr> r
-  \ defx#do_action('rename')
-  nnoremap <silent><buffer><expr> !
-  \ defx#do_action('execute_command')
-  nnoremap <silent><buffer><expr> x
-  \ defx#do_action('execute_system')
-  nnoremap <silent><buffer><expr> yy
-  \ defx#do_action('yank_path')
-  nnoremap <silent><buffer><expr> .
-  \ defx#do_action('toggle_ignored_files')
-  nnoremap <silent><buffer><expr> ;
-  \ defx#do_action('repeat')
-  nnoremap <silent><buffer><expr> h
-  \ defx#do_action('cd', ['..'])
-  nnoremap <silent><buffer><expr> ~
-  \ defx#do_action('cd')
-  nnoremap <silent><buffer><expr> q
-  \ defx#do_action('quit')
-  nnoremap <silent><buffer><expr> <Space>
-  \ defx#do_action('toggle_select') . 'j'
-  nnoremap <silent><buffer><expr> *
-  \ defx#do_action('toggle_select_all')
-  nnoremap <silent><buffer><expr> j
-  \ line('.') == line('$') ? 'gg' : 'j'
-  nnoremap <silent><buffer><expr> k
-  \ line('.') == 1 ? 'G' : 'k'
-  nnoremap <silent><buffer><expr> <C-r>
-  \ defx#do_action('redraw')
-  nnoremap <silent><buffer><expr> <C-g>
-  \ defx#do_action('print')
-  nnoremap <silent><buffer><expr> cd
-  \ defx#do_action('change_vim_cwd')
+
 	call defx#custom#column('icon', {
 	      \ 'directory_icon': '▸',
 	      \ 'opened_icon': '▾',
