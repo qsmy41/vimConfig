@@ -1,4 +1,4 @@
-" Problem:
+
 " 1. coc cannot retrieve vim symbols,
 " therefore vista.vim does not work.
 " 2. debugging tools?
@@ -141,7 +141,7 @@ nnoremap <Leader>sv :source $MYVIMRC<cr>
 nnoremap <Leader>sc :source %<cr>
 
 " quick editing ultisnips
-nnoremap <Leader>sn :UltiSnipsEdit<cr>
+nnoremap <Leader>es :UltiSnipsEdit<cr>
 
 " turn off highlighting when not searching
 nnoremap <Leader><space> :noh<return><esc>
@@ -162,11 +162,14 @@ nnoremap $ L
 " yank to the system clipboard
 nnoremap <leader>y "+y
 
+" substitute the word under the cursor and repeatable substitutes
+nnoremap s* :let @/='\<' . expand('<cword>') . '\>'<cr>cgn
+
 " highlight trailing whitespaces
 " \zs: It matches anything, marks the start of the match
 " \ze: It matches anything, marks the end of the match
 " use <leader>ds to delete all trailing spaces
-nnoremap <leader>es :execute "normal! mq/\\v\\S\\zs\\s+$\r`q"<cr>
+nnoremap <leader>ss :execute "normal! mq/\\v\\S\\zs\\s+$\r`q"<cr>
 
 " quick going through quickfix matches and toggle them
 nnoremap ]q :cnext<cr>
@@ -185,21 +188,16 @@ nnoremap gb :vs %:h<cr>
 nnoremap theEmail /\v([a-zA-Z0-9_\.\-])+\@([a-zA-Z0-9_\-])+(\.([a-zA-Z]){,5\}){,5\}<cr>
 " magic mode
 " nnoremap email /\([a-zA-Z0-9_\.\-]\)\+@\([a-zA-Z0-9_\-]\)\+\(\.\([a-zA-Z]\)\{,5}\)\{,5}<cr>
-
-" change current split's width and height
-" did not find a way to map using CTRL,
-" (mapping punctuations seem unsupported)
-" so have to press leader key arbitrary number of times...
-" noremap <Leader>n <C-w><
-" noremap <Leader>m <C-w>-
-" noremap <Leader>, <C-w>+
-" noremap <Leader>. <C-w>>
 "}}}
 " Visual mode mappings ---{{{
+" consider dropping this because it is a bit useless.
 " for obtaining the selected texts
 " and add chars to the front and back of it.
 " obtain the selected text by using '\0'.
-vnoremap s :/.*/
+vnoremap ss :s/.*/\0<left><left>
+
+" substitute the visually selected words
+vnoremap s* "qy:let @/=@q<cr>cgn
 
 " go to start and end of line in visual mode
 vnoremap H 0
@@ -380,6 +378,12 @@ Plug 'liuchengxu/vista.vim'
 Plug 'Shougo/defx.nvim'
 Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
+" change 'surroundings'
+Plug 'tpope/vim-surround'
+" quick navigation
+Plug 'easymotion/vim-easymotion'
+" use sign column to show change to a file managed by VCS
+Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
 
 call plug#end()
 "}}}
@@ -472,29 +476,30 @@ nnoremap <leader>gl :Glog<cr>
 " fzf settings ---{{{
 " in command line "brew install the_silver_searcher"
 " so that :FzfAg can be used
-nnoremap <leader>ff :FzfFiles %:h
-nnoremap <leader>fa :FzfAg<cr>
-nnoremap <leader>fg :FzfGFiles<cr>
-nnoremap <leader>fb :FzfBuffers<cr>
-nnoremap <leader>fl :FzfLines<cr>
-nnoremap <leader>fw :FzfWindows<cr>
-nnoremap <leader>fs :FzfSnippets<cr>
-nnoremap <leader>fc :FzfCommits<cr>
-nnoremap <leader>ft :FzfTags<cr>
+nnoremap <leader>ff :Files %:h
+nnoremap <leader>fa :Ag<cr>
+nnoremap <leader>fg :GFiles<cr>
+nnoremap <leader>fb :Buffers<cr>
+nnoremap <leader>fl :Lines<cr>
+nnoremap <leader>fw :Windows<cr>
+nnoremap <leader>fs :Snippets<cr>
+nnoremap <leader>fc :Commits<cr>
+nnoremap <leader>ft :Tags<cr>
+nnoremap <leader>fm :Marks<cr>
 " non-conventional mappings
-nnoremap <leader>fd :FzfHelptags<cr>
-nnoremap <leader>fm :FzfMarks<cr>
-nnoremap <leader>f, :FzfMaps<cr>
+nnoremap <leader>f, :Maps<cr>
+nnoremap <leader>fd :Helptags<cr>
+nnoremap <leader>fz :Commands<cr>
 " search for opened files
-nnoremap <leader>fh :FzfHistory<cr>
+nnoremap <leader>fh :History<cr>
 " search for commands
-nnoremap <leader>f: :FzfHistory:<cr>
+nnoremap <leader>f: :History:<cr>
 " search for search histories
-nnoremap <leader>f/ :FzfHistory/<cr>
+nnoremap <leader>f/ :History/<cr>
 " for searching system files
-nnoremap <leader>fn :FzfLocate 
+nnoremap <leader>fn :Locate 
 
-" Change branches with Gbranch
+" Change branches with Gbranch, the custom fuzzy function
 fun! s:change_branch(e)
     let res = system("git checkout ", a:e)
     " reload the current file
@@ -516,7 +521,6 @@ command! Gbranch call fzf#run({
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
-let g:fzf_command_prefix = 'Fzf'
 
 " An action can be a reference to a function that processes selected lines
 function! s:build_quickfix_list(lines)
@@ -706,6 +710,28 @@ function! s:defx_my_settings() abort
 	      \ 'selected_icon': '✓',
 	      \ })
 endfunction
+"}}}
+" easy-motion settings ---{{{
+" reset default leader from <leader><leader> to something else
+" should try not to use this, since it is not really improving productivity
+map <leader>q <Plug>(easymotion-prefix)
+" <Leader>f{char} to move to {char}
+map  <Leader>s <Plug>(easymotion-bd-f)
+nmap <Leader>s <Plug>(easymotion-overwin-f)
+" s{char}{char} to move to {char}{char} across pane
+nmap s <Plug>(easymotion-overwin-f2)
+" t{char}{char} to move to <cursor>{char}{char} in the same pane
+nmap t <Plug>(easymotion-t2)
+" n-char search motion in the same pane
+map  <leader>/ <Plug>(easymotion-sn)
+omap <leader>/ <Plug>(easymotion-tn)
+"}}}
+" Signify settings --{{{
+" sadly the signs are covered by ALE oens :(
+" default updatetime 4000ms is not good for async update
+set updatetime=100
+let g:signify_disable_by_default = 1
+nnoremap <leader>ts :SignifyToggle<cr>
 "}}}
 
 colorscheme gruvbox
