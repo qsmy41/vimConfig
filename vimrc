@@ -464,11 +464,11 @@ let g:C_UseTool_doxygen = 'yes'
 "}}}
 " fugitive settings ---{{{
 nnoremap <leader>gs :Gstatus<cr>
-nnoremap <leader>gd :Gvdiffsplit<cr>
+nnoremap <leader>gv :Gvdiffsplit<cr>
 nnoremap <leader>gw :Gwrite<cr>
 nnoremap <leader>gr :Gread<cr>
 nnoremap <leader>gc :Gcommit<cr>
-nnoremap <leader>gr :Gremove<cr>
+nnoremap <leader>gd :Gremove<cr>
 nnoremap <leader>gm :Gmove
 nnoremap <leader>gb :Gblame<cr>
 nnoremap <leader>gl :Glog<cr>
