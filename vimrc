@@ -115,6 +115,7 @@ set wildmenu
 
 " set MacVim's font
 set guifont=Hack\ Nerd\ Font:h18
+set guioptions=
 
 syntax on
 filetype plugin indent on
