@@ -97,6 +97,7 @@ set tabstop=4
 set shiftwidth=4
 set textwidth=78
 set showcmd
+set background=dark
 " by default backspacing auto-indentation,
 " line breaks or previous edits are not allowed.
 set backspace=indent,eol,start
@@ -112,6 +113,9 @@ set path+=**
 " display all matching files while tab completion
 set wildmenu
 
+" set MacVim's font
+set guifont=Hack\ Nerd\ Font:h18
+
 syntax on
 filetype plugin indent on
 "}}}
@@ -119,9 +123,9 @@ filetype plugin indent on
 " => Mappings
 " General mappings ---{{{
 " Don't use <esc> to go back to normal mode!
-inoremap jk <esc>
-vnoremap jk <esc>
-nnoremap jk <esc>
+inoremap sd <esc>
+vnoremap sd <esc>
+nnoremap sd <esc>
 " remapping <esc> only leads to problems
 " for learning purpose
 " inoremap <esc> <nop>
@@ -260,6 +264,7 @@ onoremap al' :<c-u>execute "normal! ?'\rhva'"<cr>
 augroup forLols
     autocmd!
     autocmd VimEnter * echo 'Welcome To Vim >^.^<'
+    autocmd BufEnter * silent! lcd %:p:h
 augroup END
 
 " e.g. the following will not be called
@@ -721,7 +726,7 @@ map <leader>q <Plug>(easymotion-prefix)
 map  <Leader>s <Plug>(easymotion-bd-f)
 nmap <Leader>s <Plug>(easymotion-overwin-f)
 " s{char}{char} to move to {char}{char} across pane
-nmap s <Plug>(easymotion-overwin-f2)
+nmap f <Plug>(easymotion-overwin-f2)
 " t{char}{char} to move to <cursor>{char}{char} in the same pane
 nmap t <Plug>(easymotion-t2)
 " n-char search motion in the same pane
@@ -739,6 +744,8 @@ nnoremap <leader>ts :SignifyToggle<cr>
 "}}}
 
 colorscheme gruvbox
+let g:gruvbox_contrast_dark = 'soft'
+let g:grovbox_contrast_light = 'soft'
 """"""""""""""""""""""""""""""
 " ==> End Plugins and settings
 """"""""""""""""""""""""""""""
