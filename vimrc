@@ -119,9 +119,9 @@ filetype plugin indent on
 " => Mappings
 " General mappings ---{{{
 " Don't use <esc> to go back to normal mode!
-inoremap sd <esc>
-vnoremap sd <esc>
-nnoremap sd <esc>
+inoremap jk <esc>
+vnoremap jk <esc>
+nnoremap jk <esc>
 " remapping <esc> only leads to problems
 " for learning purpose
 " inoremap <esc> <nop>
@@ -464,15 +464,16 @@ let g:C_UseTool_doxygen = 'yes'
 "}}}
 " fugitive settings ---{{{
 nnoremap <leader>gs :Gstatus<cr>
-nnoremap <leader>gv :Gvdiffsplit<cr>
+nnoremap <leader>gd :Gvdiffsplit<cr>
 nnoremap <leader>gw :Gwrite<cr>
 nnoremap <leader>gr :Gread<cr>
 nnoremap <leader>gc :Gcommit<cr>
-nnoremap <leader>gd :Gremove<cr>
+nnoremap <leader>gv :Gremove<cr>
 nnoremap <leader>gm :Gmove
-nnoremap <leader>gb :Gblame<cr>
+nnoremap <leader>gh :Gblame<cr>
 nnoremap <leader>gl :Glog<cr>
 nnoremap <leader>gp :Gpush<cr>
+nnoremap <leader>gb :Gbranch<cr>
 "}}}
 " fzf settings ---{{{
 " in command line "brew install the_silver_searcher"
@@ -728,6 +729,8 @@ map  <leader>/ <Plug>(easymotion-sn)
 omap <leader>/ <Plug>(easymotion-tn)
 "}}}
 " Signify settings --{{{
+" Potential improvements: support the feature for split panes
+" Currently panes on the side cannot have signs added
 " sadly the signs are covered by ALE oens :(
 " default updatetime 4000ms is not good for async update
 set updatetime=100
