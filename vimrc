@@ -114,7 +114,7 @@ set path+=**
 set wildmenu
 
 " options setting for MacVim
-set guifont=Hack\ Nerd\ Font:h18
+set guifont=Hack\ Nerd\ Font:h17
 set guioptions=
 set guicursor=a:block-blinkon0
 
