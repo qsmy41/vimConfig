@@ -113,9 +113,10 @@ set path+=**
 " display all matching files while tab completion
 set wildmenu
 
-" set MacVim's font
+" options setting for MacVim
 set guifont=Hack\ Nerd\ Font:h18
 set guioptions=
+set guicursor=a:block-blinkon0
 
 syntax on
 filetype plugin indent on
