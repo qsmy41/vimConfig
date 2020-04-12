@@ -1,5 +1,6 @@
 # Info
-This vimrc is geared towards python programming and latex editing on Mac. Main plugins used:
+This vimrc is geared towards python programming and latex editing on Mac. 
+Main plugins used:
 1. colorscheme: gruvbox
 2. linting: ale
 3. code completion: coc
@@ -15,17 +16,22 @@ This vimrc is geared towards python programming and latex editing on Mac. Main p
 
 # Installation
 
-1. Go to Home directory and clone the repo
+1. Go to Home directory and clone the repo, then change the name
 ```
 cd
 git clone https://github.com/qsmy41/vimConfig
+mv vimconfig/ .vim/
 ```
-2. open .vimrc
+2. Clone Vundle repo for plugins
+```
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+```
+3. open .vimrc
 ```
 vim .vimrc
 ```
-3. change its content to one-line `runtime vimrc`.
-4. Source vimrc and install the plugins
+4. change its content to one-line `runtime vimrc`.
+5. Source vimrc and install the plugins
 ```
 :source ~/.vimrc
 :PluginInstall
