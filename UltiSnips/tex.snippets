@@ -146,22 +146,19 @@ endsnippet
 snippet item "item" b
 \begin{itemize}
 		\item $1
-\end{itemize}
-$0
+\end{itemize} $0
 endsnippet
 
 snippet list "list" b
 \begin{enumerate}[label = (\\${1:roman}*)]
     \item $2
-\end{enumerate}
-$0
+\end{enumerate} $0
 endsnippet
 
 snippet description "description" b
 \begin{description}
 		\item[$1] $2
-\end{description}
-$0
+\end{description} $0
 endsnippet
 
 snippet figure "figure" b
@@ -193,12 +190,7 @@ snippet \[ "\[ / \]" iA
 endsnippet
 
 snippet jk "InlineMath" wA
-$${1}$`!p
-if t[2] and t[2][0] not in [',', '.', '?', '-', ' ']:
-	snip.rv = ' '
-else:
-	snip.rv = ''
-`$2
+$${1}$$2
 endsnippet
 
 snippet box "box up" b
@@ -277,7 +269,7 @@ snippet -+ "minus/plus" iA
 endsnippet
 
 context "math()"
-snippet == "equivalent" iA
+snippet === "equivalent" iA
 \\equiv
 endsnippet
 

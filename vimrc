@@ -117,6 +117,7 @@ set wildmenu
 set guifont=Hack\ Nerd\ Font:h17
 set guioptions=
 set guicursor=a:block-blinkon0
+set linespace=2
 
 syntax on
 filetype plugin indent on
@@ -402,7 +403,7 @@ nmap <silent> <C-n> <Plug>(ale_next_wrap)
 " toggle ale on and off
 nnoremap <Leader>ta :ALEToggle<CR>
 let g:ale_sign_error = '❌'
-let g:ale_sign_warning = '⚠️'
+let g:ale_sign_warning = '❗'
 let g:ale_open_list = 1
 " control the time for ale to do linting
 let g:ale_lint_on_text_changed = 'never'
