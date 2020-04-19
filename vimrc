@@ -295,6 +295,7 @@ augroup pythonFiles
                 \ setlocal autoindent       |
                 \ setlocal fileformat=unix  |
                 \ setlocal conceallevel=1
+    au FileType python setlocal foldmethod=marker
     au FileType python nnoremap <buffer> <F9> :w <bar> :exec '!python' shellescape(@%, 1)<cr>
     " example of writing a snippet using vimscript
     au FileType python :iabbrev <buffer> iff if:<left>
@@ -570,6 +571,8 @@ let g:fzf_colors =
   \ 'header':  ['fg', 'Comment'] }
 "}}}
 " Startify settings ---{{{
+let g:startify_change_to_dir = 0
+let g:startify_change_to_vcs_root = 1
 let g:startify_files_number = 8
 let g:startify_bookmarks = [
             \ {'z': '~/.zshrc'},
@@ -658,6 +661,8 @@ let g:vista#renderer#icons = {
 \  }
 "}}}
 " Defx settings ---{{{
+" need to install pynvim by "pip install pynvim"
+" if not enough try pip3 as well
 
 nnoremap <leader>fe :Defx -split=vertical -winwidth=30 -direction=topleft<cr>
 " update Defx as files are updated
