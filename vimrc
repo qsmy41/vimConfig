@@ -3,6 +3,7 @@
 " therefore vista.vim does not work.
 " 2. debugging tools?
 " checkout vimspector and possibly others next time.
+" 3. configure defx so that it can open pdf files.
 
 
 " ===========================
@@ -470,6 +471,12 @@ let g:C_UseTool_doxygen = 'yes'
 
 " fw: File Window
 " nnoremap <leader>fw :Vifm ~/ %:h<cr>
+autocmd FileType vifm call s:vifm_my_settings()
+function! s:vifm_my_settings() abort
+    echom("This is not working because vim is actually NOT opened.")
+    set relativenumber
+    set number
+endfunction
 "}}}
 " fugitive settings ---{{{
 nnoremap <leader>gs :Gstatus<cr>
@@ -724,6 +731,9 @@ function! s:defx_my_settings() abort
 	      \ 'readonly_icon': '✗',
 	      \ 'selected_icon': '✓',
 	      \ })
+
+    set relativenumber
+    set number
 endfunction
 "}}}
 " easy-motion settings ---{{{
@@ -734,9 +744,9 @@ map <leader>q <Plug>(easymotion-prefix)
 map  <Leader>s <Plug>(easymotion-bd-f)
 nmap <Leader>s <Plug>(easymotion-overwin-f)
 " s{char}{char} to move to {char}{char} across pane
-nmap f <Plug>(easymotion-overwin-f2)
+nmap <Leader>j <Plug>(easymotion-overwin-f2)
 " t{char}{char} to move to <cursor>{char}{char} in the same pane
-nmap t <Plug>(easymotion-t2)
+nmap <Leader>t <Plug>(easymotion-t2)
 " n-char search motion in the same pane
 map  <leader>/ <Plug>(easymotion-sn)
 omap <leader>/ <Plug>(easymotion-tn)
