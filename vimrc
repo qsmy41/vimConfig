@@ -471,12 +471,6 @@ let g:C_UseTool_doxygen = 'yes'
 
 " fw: File Window
 " nnoremap <leader>fw :Vifm ~/ %:h<cr>
-autocmd FileType vifm call s:vifm_my_settings()
-function! s:vifm_my_settings() abort
-    echom("This is not working because vim is actually NOT opened.")
-    set relativenumber
-    set number
-endfunction
 "}}}
 " fugitive settings ---{{{
 nnoremap <leader>gs :Gstatus<cr>
