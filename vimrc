@@ -665,7 +665,7 @@ let g:vista#renderer#icons = {
 " need to install pynvim by "pip install pynvim"
 " if not enough try pip3 as well
 
-nnoremap <leader>fe :Defx -split=vertical -winwidth=30 -direction=topleft<cr>
+nnoremap <leader>fe :Defx -toggle -split=vertical -winwidth=30 -direction=topleft<cr>
 " update Defx as files are updated
 autocmd BufWritePost * call defx#redraw()
 
@@ -677,9 +677,10 @@ function! s:defx_my_settings() abort
   nnoremap <silent><buffer><expr> m     defx#do_action('move')
   nnoremap <silent><buffer><expr> p     defx#do_action('paste')
   nnoremap <silent><buffer><expr> l     defx#do_action('open')
+  nnoremap <silent><buffer><expr> o     defx#do_action('drop')
   nnoremap <silent><buffer><expr> E     defx#do_action('open', 'vsplit')
   nnoremap <silent><buffer><expr> P     defx#do_action('open', 'pedit')
-  nnoremap <silent><buffer><expr> o     defx#do_action('open_or_close_tree')
+  nnoremap <silent><buffer><expr> t     defx#do_action('open_or_close_tree')
   nnoremap <silent><buffer><expr> K     defx#do_action('new_directory')
   nnoremap <silent><buffer><expr> N     defx#do_action('new_file')
   nnoremap <silent><buffer><expr> M     defx#do_action('new_multiple_files')
