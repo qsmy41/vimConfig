@@ -120,7 +120,10 @@ set guioptions=
 set guicursor=a:block-blinkon0
 set linespace=2
 
-syntax on
+" options for setting old vim (to use vim on school machine)
+let g:netrw_bufsettings = 'noma nomod nu nowrap ro nobl'
+
+synta on
 filetype plugin indent on
 "}}}
 
@@ -680,6 +683,7 @@ function! s:defx_my_settings() abort
   nnoremap <silent><buffer><expr> o     defx#do_action('drop')
   nnoremap <silent><buffer><expr> E     defx#do_action('open', 'vsplit')
   nnoremap <silent><buffer><expr> P     defx#do_action('open', 'pedit')
+  nnoremap <silent><buffer><expr> T     defx#do_action('open', 'tabnew')
   nnoremap <silent><buffer><expr> t     defx#do_action('open_or_close_tree')
   nnoremap <silent><buffer><expr> K     defx#do_action('new_directory')
   nnoremap <silent><buffer><expr> N     defx#do_action('new_file')
