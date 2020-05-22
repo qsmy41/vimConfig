@@ -285,9 +285,21 @@ augroup END
 augroup vimFiles
     autocmd!
     autocmd FileType help wincmd L | vertical resize 78
-    autocmd FileType vim nnoremap <buffer> <localleader>c I"<space><esc>
+    autocmd FileType vim nnoremap <buffer> <leader>c I"<space><esc>
 augroup END
 "}}}
+" C file settings ---{{{
+augroup cFiles
+    au!
+    au FileType c 
+                \ setlocal expandtab        |
+                \ setlocal tabstop=2        |
+                \ setlocal softtabstop=2    |
+                \ setlocal shiftwidth=2     |
+                \ setlocal textwidth=80     |
+                \ setlocal colorcolumn=-1    
+    au FileType c nnoremap <buffer> <leader>c I//<space><esc>
+" }}}
 " Python file settings ---{{{
 augroup pythonFiles
     au!
@@ -304,7 +316,7 @@ augroup pythonFiles
     " example of writing a snippet using vimscript
     au FileType python :iabbrev <buffer> iff if:<left>
     " commenting snippet for python
-    au FileType python nnoremap <buffer> <localleader>c I#<space><esc>
+    au FileType python nnoremap <buffer> <leader>c I#<space><esc>
 augroup END
 "}}}
 " Latex file settings ---{{{
@@ -317,7 +329,7 @@ augroup latexFiles
                 \ setlocal expandtab        |
                 \ setlocal autoindent       |
                 \ setlocal conceallevel=2
-    autocmd FileType tex nnoremap <buffer> <localleader>c I%<space><esc>
+    autocmd FileType tex nnoremap <buffer> <leader>c I%<space><esc>
 augroup END
 "}}}
 " HTML file settings ---{{{
@@ -329,7 +341,7 @@ augroup END
 " JavaScript file settings ---{{{
 augroup javascriptFile
     au!
-    au FileType javascript  nnoremap <buffer> <localleader>c    I//<space><esc>
+    au FileType javascript  nnoremap <buffer> <leader>c    I//<space><esc>
 augroup END
 "}}}
 
@@ -376,8 +388,6 @@ Plug 'neoclide/coc.nvim', {'branch' : 'release'}
 Plug 'lervag/vimtex'
 " further latex conceal level support
 Plug 'KeitaNakamura/tex-conceal.vim', {'for': 'tex'}
-" C language plugin
-" Plug 'vim-scripts/c.vim'
 " Git integration with vim
 Plug 'tpope/vim-fugitive'
 " File search in vim and path to the main fzf
@@ -461,10 +471,6 @@ let g:vimtex_view_general_viewer='zathura'
 "     let execstr = "silent !zathura --synctex-forward ".line(".").":".col(".").":%:p %:p:r.pdf &"
 "     exec execstr
 " endfunction
-"}}}
-" C-vim settings ---{{{
-let g:C_UseTool_cmake   = 'yes'
-let g:C_UseTool_doxygen = 'yes'
 "}}}
 " Vifm settings ---{{{
 " Color scheme setting:
