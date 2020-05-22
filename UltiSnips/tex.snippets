@@ -69,6 +69,7 @@ snippet model "template" b
 \usepackage{graphicx} % for importing images
 \graphicspath{{./images/}} % for the path to images, also always put label behind captions
 \usepackage{textcomp} % for using degree symbol
+\usepackage{hyperref} % for clickable link in the pdf
 
 \theoremstyle{definition}
 \mdfdefinestyle{defEnv}{%
@@ -190,7 +191,7 @@ snippet \[ "\[ / \]" iA
 endsnippet
 
 snippet jk "InlineMath" wA
-$${1}$$2
+$${1}$$0
 endsnippet
 
 snippet box "box up" b
@@ -734,6 +735,11 @@ endsnippet
 context "math()"
 snippet "([A-Z])cr" "\mathscr" riA
 \\mathscr{`!p snip.rv=match.group(1)`}
+endsnippet
+
+context "math()"
+snippet "([A-Za-z])rm" "\mathrm" riA
+\\mathrm{`!p snip.rv=match.group(1)`}
 endsnippet
 
 context "math()"

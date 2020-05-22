@@ -106,6 +106,8 @@ set backspace=indent,eol,start
 set incsearch
 set hlsearch
 set ignorecase
+" fold method based on default markers
+set foldmethod=marker
 
 " FINDING FILES
 " search down into subfolders
@@ -143,7 +145,7 @@ nnoremap sd <esc>
 let mapleader = "\<Space>"
 " maplocalleader is the same, except for the name,
 " and is used for specific buffers
-" let maplocalleader = "\\"
+let maplocalleader = "\<Space>"
 "}}}
 " Normal mode mappings ---{{{
 " for quick editing and sourcing of vimrc
@@ -282,7 +284,6 @@ augroup END
 " Vimscript file settings ---{{{
 augroup vimFiles
     autocmd!
-    autocmd FileType vim setlocal foldmethod=marker
     autocmd FileType help wincmd L | vertical resize 78
     autocmd FileType vim nnoremap <buffer> <localleader>c I"<space><esc>
 augroup END
@@ -291,15 +292,14 @@ augroup END
 augroup pythonFiles
     au!
     au BufNewFile,BufRead *.py
+                \ setlocal noexpandtab      |
                 \ setlocal tabstop=4        |
                 \ setlocal softtabstop=4    |
                 \ setlocal shiftwidth=4     |
                 \ setlocal textwidth=80     |
-                \ setlocal expandtab        |
                 \ setlocal autoindent       |
                 \ setlocal fileformat=unix  |
                 \ setlocal conceallevel=1
-    au FileType python setlocal foldmethod=marker
     au FileType python nnoremap <buffer> <F9> :w <bar> :exec '!python' shellescape(@%, 1)<cr>
     " example of writing a snippet using vimscript
     au FileType python :iabbrev <buffer> iff if:<left>
@@ -355,8 +355,6 @@ Plugin 'morhetz/gruvbox'
 Plugin 'vim-airline/vim-airline'
 " themes for vim-airline
 Plugin 'vim-airline/vim-airline-themes'
-" Asynchronous Linting Engine for syntax checking nad semnantic errors
-Plugin 'dense-analysis/ale'
 " snippets for different languages/filetype
 Plugin 'sirver/ultisnips'
 " vim file explorer
@@ -370,6 +368,8 @@ call vundle#end()
 " :PlugUpdate to update all plugins
 call plug#begin('~/.vim/plugged')
 
+" Asynchronous Linting Engine for syntax checking and semnantic errors
+Plug 'dense-analysis/ale', { 'on' : 'ALEToggle' }
 " Conquer of Completion: Intellisense engine
 Plug 'neoclide/coc.nvim', {'branch' : 'release'}
 " latex for vim
