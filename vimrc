@@ -115,6 +115,8 @@ set foldmethod=marker
 set path+=**
 " display all matching files while tab completion
 set wildmenu
+" ctags setting
+set tags=./tags;/
 
 " options setting for MacVim
 set guifont=Hack\ Nerd\ Font:h17
