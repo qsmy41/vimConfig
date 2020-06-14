@@ -1,0 +1,12 @@
+PotionContents	potion.txt	/*PotionContents*
+PotionCredits	potion.txt	/*PotionCredits*
+PotionMappings	potion.txt	/*PotionMappings*
+PotionOptions	potion.txt	/*PotionOptions*
+PotionUsage	potion.txt	/*PotionUsage*
+Potion_BytecodeSplit	potion.txt	/*Potion_BytecodeSplit*
+Potion_Command	potion.txt	/*Potion_Command*
+Potion_CompileAndRun	potion.txt	/*Potion_CompileAndRun*
+Potion_ShowBytecode	potion.txt	/*Potion_ShowBytecode*
+g:potion_bytecode_split	potion.txt	/*g:potion_bytecode_split*
+g:potion_command	potion.txt	/*g:potion_command*
+potion.txt	potion.txt	/*potion.txt*

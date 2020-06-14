@@ -1,11 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =9
-let g:netrw_dirhist_9='/Users/qsmy41/.vim/plugged/tex-conceal.vim/after/syntax'
-let g:netrw_dirhist_8='/Users/qsmy41/.vim/plugged/tex-conceal.vim/after'
-let g:netrw_dirhist_7='/Users/qsmy41/.vim/plugged/tex-conceal.vim'
-let g:netrw_dirhist_6='/Users/qsmy41/.vim/plugged/tex-conceal.vim/after'
-let g:netrw_dirhist_5='/Users/qsmy41/.vim/plugged/tex-conceal.vim'
-let g:netrw_dirhist_4='/Users/qsmy41/.vim/plugged'
-let g:netrw_dirhist_3='/Users/qsmy41/.vim/pack/tpope/start/fugitive'
-let g:netrw_dirhist_2='/Users/qsmy41/.vim'
-let g:netrw_dirhist_1='/Users/qsmy41/Documents/ICL/Assignments & Notes/Maths/notes/Calculus, Algebra & Analysis for JMC'
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/homes/ayz18/Documents/C_Study/c-tools-lecture2/01.string-debug'
+let g:netrw_dirhist_2='/homes/ayz18/Documents/arm11_45/src/utils/bitExtract'
+let g:netrw_dirhist_3='/homes/ayz18/Documents/arm11_45/src/emulator/decoder'
+let g:netrw_dirhist_4='/homes/ayz18/.vim/pack/potionPack/start/potion'

@@ -1,3 +1,5 @@
+" the starting if statement and the buffer variable at the end
+" act as a "guard" to prevent this script from running twice or more.
 if exists("b:current_syntax")
     finish
 endif
@@ -44,11 +46,11 @@ highlight link potionString String
 " level
 " "matchgroup" is used to highlight the "start" &/or "end" pattern differently
 " than the body of the region
-sy region par1 matchgroup=par1 start=/(/ end=/)/ contains=par2
-sy region par2 matchgroup=par2 start=/(/ end=/)/ contains=par3 contained
-sy region par3 matchgroup=par3 start=/(/ end=/)/ contains=par1 contained
-hi par1 ctermfg=red guifg=red
-hi par2 ctermfg=blue guifg=blue
-hi par3 ctermfg=darkgreen guifg=darkgreen
+" sy region par1 matchgroup=par1 start=/(/ end=/)/ contains=par2
+" sy region par2 matchgroup=par2 start=/(/ end=/)/ contains=par3 contained
+" sy region par3 matchgroup=par3 start=/(/ end=/)/ contains=par1 contained
+" hi par1 ctermfg=red guifg=red
+" hi par2 ctermfg=blue guifg=blue
+" hi par3 ctermfg=darkgreen guifg=darkgreen
 
 let b:current_syntax = "potion"

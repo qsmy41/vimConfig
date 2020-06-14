@@ -1,2 +1,3 @@
-This is the Potion plugin implemented after the 
-"Learn Vimscript the hard way" .
+This is the Potion plugin implemented following 
+"Learn Vimscript the hard way". For documentation,
+please go to ./doc/potion.txt for more information.

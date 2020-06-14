@@ -1,0 +1,75 @@
+*potion.txt* functionality for the potion programming language
+
+                    ___      _   _              ~
+                   / _ \___ | |_(_) ___  _ __   ~
+                  / /_)/ _ \| __| |/ _ \| '_ \  ~
+                 / ___/ (_) | |_| | (_) | | | | ~
+                 \/    \___/ \__|_|\___/|_| |_| ~
+
+        Functionality for the Potion programming language.
+      Includes syntax highlighting, code folding, and more!
+
+====================================================================
+CONTENTS                                            *PotionContents*
+
+    1. Usage ................ |PotionUsage|
+    2. Mappings ............. |PotionMappings|
+    3. Options .............. |PotionOptions|
+    4. Credits .............. |PotionCredits|
+
+
+====================================================================
+Section 1: Usage                                       *PotionUsage*
+
+This plugin automatically provides syntax highlighting for Potion 
+files (files ending in .pn) and related potion byte code file 
+(named as "__Potion_Bytecode__"), custom folding mechanism (using
+'za', 'zR', 'zM', etc.), and custom section movement (using '[[', 
+']]', '[]', '][').
+
+It also provides mapping for quick compilation and bytecode review
+AFTER setting |g:potion_command| in your .vimrc file.
+
+
+====================================================================
+Section 2: Mappings                                 *PotionMappings*
+
+
+<localleader>r                                *Potion_CompileAndRun*
+                        Compile and run the current potion file. The
+                        output is shown in the command line after
+                        being cleared so that it is presented
+                        cleanly.
+
+
+<localleader>b                                 *Potion_ShowBytecode*
+                        Compile and show the Bytecode of the current
+                        Potion file in a temporary window named 
+                        "__Potion_Bytecode__". Whether the split
+                        window should be vertical or horizontal can
+                        be specified in |g:potion_bytecode_split|.
+
+
+====================================================================
+Section 3: Options                                   *PotionOptions*
+
+
+*g:potion_command*                                    *Potion_Command*
+                        Specify the path to the Potion compiler,
+                        which should look like: >
+                        g:potion_command="path/to/potion/bin/potion"
+<
+
+*g:potion_bytecode_split*                       *Potion_BytecodeSplit*
+                        Specify how to split the output window.
+                        E.g. to split horizontally: >
+                        g:potion_bytecode_split="sp"
+<
+
+====================================================================
+Section 4: Credits                                   *PotionCredits*
+
+Heavily under the guidance of "Learn Vimscript The Hard Way", with
+some personal attempts on some of the extensions. I would definitely
+recommend this to others who would also like to have a start on 
+Vimscript!

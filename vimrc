@@ -127,7 +127,7 @@ set linespace=2
 " options for setting old vim (to use vim on school machine)
 let g:netrw_bufsettings = 'noma nomod nu nowrap ro nobl'
 
-synta on
+syntax on
 filetype plugin indent on
 "}}}
 
@@ -147,7 +147,7 @@ nnoremap sd <esc>
 let mapleader = "\<Space>"
 " maplocalleader is the same, except for the name,
 " and is used for specific buffers
-let maplocalleader = "\<Space>"
+let maplocalleader = "\\"
 "}}}
 " Normal mode mappings ---{{{
 " for quick editing and sourcing of vimrc
@@ -204,6 +204,12 @@ nnoremap theEmail /\v([a-zA-Z0-9_\.\-])+\@([a-zA-Z0-9_\-])+(\.([a-zA-Z]){,5\}){,
 " magic mode
 " nnoremap email /\([a-zA-Z0-9_\.\-]\)\+@\([a-zA-Z0-9_\-]\)\+\(\.\([a-zA-Z]\)\{,5}\)\{,5}<cr>
 "}}}
+" Insert mode mappins {{{
+inoremap <C-h> <esc><C-w>h
+inoremap <C-j> <esc><C-w>j
+inoremap <C-k> <esc><C-w>k
+inoremap <C-l> <esc><C-w>l
+" }}}
 " Visual mode mappings ---{{{
 " consider dropping this because it is a bit useless.
 " for obtaining the selected texts
@@ -219,6 +225,11 @@ vnoremap H 0
 vnoremap L $
 vnoremap 0 H
 vnoremap $ L
+
+vnoremap <C-h> <esc><C-w>h
+vnoremap <C-j> <esc><C-w>j
+vnoremap <C-k> <esc><C-w>k
+vnoremap <C-l> <esc><C-w>l
 
 " yank to system clipboard
 vnoremap <leader>y "+y
