@@ -1,6 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =4
-let g:netrw_dirhist_1='/homes/ayz18/Documents/C_Study/c-tools-lecture2/01.string-debug'
-let g:netrw_dirhist_2='/homes/ayz18/Documents/arm11_45/src/utils/bitExtract'
-let g:netrw_dirhist_3='/homes/ayz18/Documents/arm11_45/src/emulator/decoder'
-let g:netrw_dirhist_4='/homes/ayz18/.vim/pack/potionPack/start/potion'
+let g:netrw_dirhistcnt =4
+let g:netrw_dirhist_4='/Users/qsmy41/Documents/ICL/Academic Activities/CP/Notes'
+let g:netrw_dirhist_3='/Users/qsmy41/Documents/ICL/Academic Activities/CP'
+let g:netrw_dirhist_2='/Users/qsmy41/Documents/ICL/Theories of deep learning/autoencoder/report'
+let g:netrw_dirhist_1='/Users/qsmy41/Documents/ICL/Academic Activities/CP/Global Round 11'

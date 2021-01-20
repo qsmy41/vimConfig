@@ -70,12 +70,41 @@ snippet model "template" b
 \graphicspath{{./images/}} % for the path to images, also always put label behind captions
 \usepackage{textcomp} % for using degree symbol
 \usepackage{hyperref} % for clickable link in the pdf
+\usepackage[all]{hypcap} % for clickable link to images instead of caption
+\usepackage[margin=0.5in]{geometry} % default is 1.5in
+\allowdisplaybreaks % allow page breaking in display maths, like align
 
 \theoremstyle{definition}
 \mdfdefinestyle{defEnv}{%
   hidealllines=false,
   nobreak=true,
   innertopmargin=-1ex,
+}
+
+% The following is for writing block of code
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+% Use the following to change code language and related settings
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
 }
 
 \pagestyle{headings}
@@ -164,7 +193,7 @@ endsnippet
 
 snippet figure "figure" b
 \begin{figure}
-  	\includegraphics[scale=0.15]{$1}
+  	\includegraphics[scale=0.15]{${1:PATH/TO/figure}}
   	\centering
   	\caption{$2}\label{$3}
 \end{figure}
@@ -510,6 +539,13 @@ snippet bmat "matrix with square brackets" i
 \\end{bmatrix} $0
 endsnippet
 
+context "math()"
+snippet vmat "matrix with straigh line brackets" i
+\\begin{vmatrix}
+		$1
+\\end{vmatrix} $0
+endsnippet
+
 snippet uli "underline" i
 \\underline{$1}$2
 endsnippet
@@ -661,6 +697,12 @@ priority 200
 context "math()"
 snippet l[tp "{[]}^{} - height adjusted" iA
 {\\left[$1\\right]}^{$2}$3
+endsnippet
+
+priority 200
+context "math()"
+snippet l{tp "{\{\}}^{} - height adjusted" iA
+{\\left\\{$1\\right\\}}^{$2}$3
 endsnippet
 
 priority 200

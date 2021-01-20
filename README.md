@@ -20,7 +20,7 @@ Main plugins used:
 ```
 cd
 git clone https://github.com/qsmy41/vimConfig
-mv vimconfig/ .vim/
+mv vimConfig/ .vim/
 ```
 2. Clone Vundle repo for plugins
 ```
