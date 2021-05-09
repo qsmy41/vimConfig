@@ -30,25 +30,16 @@
 
 # define "context math()"
 global !p
-texMathZones = ['texMathZone'+x for x in ['A', 'AS', 'B', 'BS', 'C', 'CS',
-'D', 'DS', 'E', 'ES', 'F', 'FS', 'G', 'GS', 'H', 'HS', 'I', 'IS', 'J', 'JS',
-'K', 'KS', 'L', 'LS', 'DS', 'V', 'W', 'X', 'Y', 'Z', 'AmsA', 'AmsB', 'AmsC',
-'AmsD', 'AmsE', 'AmsF', 'AmsG', 'AmsAS', 'AmsBS', 'AmsCS', 'AmsDS', 'AmsES',
-'AmsFS', 'AmsGS']]
-texIgnoreMathZones = ['texMathText']
-texMathZoneIds = vim.eval('map('+str(texMathZones)+", 'hlID(v:val)')")
-texIgnoreMathZoneIds = vim.eval('map('+str(texIgnoreMathZones)+", 'hlID(v:val)')")
-ignore = texIgnoreMathZoneIds[0]
 def math():
-	synstackids = vim.eval("synstack(line('.'), col('.') - (col('.')>=2 ? 1 : 0))")
-	try:
-		first = next(
-            i for i in reversed(synstackids) 
-            if i in texIgnoreMathZoneIds or i in texMathZoneIds
-        )
-		return first != ignore
-	except StopIteration:
-		return False
+    return vim.eval('vimtex#syntax#in_mathzone()') == '1'
+
+def comment():
+    return vim.eval('vimtex#syntax#in_comment()') == '1'
+
+def env(name):
+    [x,y] = vim.eval("vimtex#env#is_inside('" + name + "')")
+    return x != '0' and x != '0'
+
 endglobal
 
 #################################
@@ -69,10 +60,16 @@ snippet model "template" b
 \usepackage{graphicx} % for importing images
 \graphicspath{{./images/}} % for the path to images, also always put label behind captions
 \usepackage{textcomp} % for using degree symbol
-\usepackage{hyperref} % for clickable link in the pdf
+\usepackage{hyperref} % for clickable link in the pdf & customizable reference text
 \usepackage[all]{hypcap} % for clickable link to images instead of caption
 \usepackage[margin=0.5in]{geometry} % default is 1.5in
+% \usepackage[left=0.4in, right=0.4in, top=0.8in, bottom=0.8in]{geometry}
+\usepackage[title]{appendix} % for attaching appendix
 \allowdisplaybreaks % allow page breaking in display maths, like align
+% allow for more advanced table layout
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{siunitx}
 
 \theoremstyle{definition}
 \mdfdefinestyle{defEnv}{%
@@ -122,6 +119,14 @@ endsnippet
 
 snippet package "package" b
 \usepackage[${1:optionis}]{${2:package}}
+$0
+endsnippet
+
+snippet 1st "1st boxed environment for def/theorem/etc" b
+\newmdtheoremenv[style=defEnv]{theorem}{Definition}
+\begin{theorem}
+	$1
+\end{theorem}
 $0
 endsnippet
 
@@ -806,6 +811,11 @@ endsnippet
 context "math()"
 snippet dsum "summation with bounds" iA
 \\sum_{${1:n=1}}^{${2:\infty}} ${3:a_n x^n}
+endsnippet
+
+context "math()"
+snippet dprod "product with bounds" iA
+\\prod_{${1:n=1}}^{${2:\infty}} ${3:a_n x^n}
 endsnippet
 
 context "math()"
