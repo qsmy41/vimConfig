@@ -230,9 +230,11 @@ $${1}$$0
 endsnippet
 
 snippet box "box up" b
-\fbox{\begin{minipage}{\linewidth}
-$1
-\end{minipage}}
+\noindent\fbox{%
+	\parbox{\textwidth}{%
+		$1
+	}%
+}
 $0
 endsnippet
 
@@ -476,8 +478,8 @@ snippet <=> "iff" iA
 endsnippet
 
 context "math()"
-snippet ||| "|| x ||" iA
-\\lVert $1 \\rVert $2
+snippet || "|| x ||" iA
+\\norm{$1}$0
 endsnippet
 
 context "math()"
@@ -832,6 +834,11 @@ endsnippet
 context "math()"
 snippet ob "OverBrace" i
 \\overbrace{$1}^\text{$2}$3
+endsnippet
+
+context "math()"
+snippet under "write sth under the math symbol" wA
+\\underset{$1}{$2}$0
 endsnippet
 
 snippet \\\ "\ char" iA
