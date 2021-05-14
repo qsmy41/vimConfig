@@ -184,7 +184,7 @@ endsnippet
 
 snippet item "item" b
 \begin{itemize}
-		\item $1
+	\item $1
 \end{itemize} $0
 endsnippet
 
@@ -826,6 +826,11 @@ endsnippet
 context "math()"
 snippet "([A-Z])cr" "\mathscr" riA
 \\mathscr{`!p snip.rv=match.group(1)`}
+endsnippet
+
+context "math()"
+snippet "([A-Z])cal" "\mathcal" riA
+\\mathcal{`!p snip.rv=match.group(1)`}
 endsnippet
 
 context "math()"
