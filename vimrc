@@ -304,13 +304,13 @@ augroup END
 " C file settings ---{{{
 augroup cFiles
     au!
-    au FileType c 
+    au FileType c
                 \ setlocal expandtab        |
                 \ setlocal tabstop=2        |
                 \ setlocal softtabstop=2    |
                 \ setlocal shiftwidth=2     |
                 \ setlocal textwidth=80     |
-                \ setlocal colorcolumn=-1    
+                \ setlocal colorcolumn=-1
     au FileType c nnoremap <buffer> <leader>c I//<space><esc>
 " }}}
 " Python file settings ---{{{
@@ -351,9 +351,7 @@ augroup htmlFiles
     au BufWritePre,BufRead *.html :normal! gg=G
 augroup END
 "}}}
-" JavaScript file settings ---{{{
-augroup javascriptFile
-    au!
+" JavaScript file settings ---{{{ augroup javascriptFile au!
     au FileType javascript  nnoremap <buffer> <leader>c    I//<space><esc>
 augroup END
 "}}}
@@ -439,12 +437,8 @@ let g:ale_open_list = 1
 " control the time for ale to do linting
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 0
-" show errors and warnings in the status line
-let g:airline#extension#ale#enabled = 1
 " error window closes together when the main window closes
 autocmd QuitPre * if empty(&bt) | lclose | endif
-" airline theme
-let g:airline_theme = 'base16_gruvbox_dark_hard'
 "}}}
 " COC settings ---{{{
 " Use <C-j> and <C-k> to navigate the completion list
@@ -534,7 +528,7 @@ nnoremap <leader>f: :History:<cr>
 " search for search histories
 nnoremap <leader>f/ :History/<cr>
 " for searching system files
-nnoremap <leader>fn :Locate 
+nnoremap <leader>fn :Locate
 
 " Change branches with Gbranch, the custom fuzzy function
 fun! s:change_branch(e)
@@ -737,24 +731,24 @@ function! s:defx_my_settings() abort
   nnoremap <silent><buffer><expr> <
   \ defx#do_action('resize', defx#get_context().winwidth - 5)
 
-	call defx#custom#column('icon', {
-	      \ 'directory_icon': '▸',
-	      \ 'opened_icon': '▾',
-	      \ 'root_icon': ' ',
-	      \ })
+  call defx#custom#column('icon', {
+        \ 'directory_icon': '▸',
+        \ 'opened_icon': '▾',
+        \ 'root_icon': ' ',
+        \ })
 
-	call defx#custom#column('filename', {
-	      \ 'min_width': 40,
-	      \ 'max_width': 40,
-	      \ })
+  call defx#custom#column('filename', {
+        \ 'min_width': 40,
+        \ 'max_width': 40,
+        \ })
 
-	call defx#custom#column('mark', {
-	      \ 'readonly_icon': '✗',
-	      \ 'selected_icon': '✓',
-	      \ })
+  call defx#custom#column('mark', {
+        \ 'readonly_icon': '✗',
+        \ 'selected_icon': '✓',
+        \ })
 
-    set relativenumber
-    set number
+  set relativenumber
+  set number
 endfunction
 "}}}
 " easy-motion settings ---{{{
@@ -873,12 +867,28 @@ let g:mkdp_page_title = '「${name}」'
 " these filetypes will have MarkdownPreview... commands
 let g:mkdp_filetypes = ['markdown']
 
-" mapping 
+" mapping
 " why do the following does not work?
 nnoremap <C-s> <Plug>(MarkdownPreview)
 nnoremap <M-s> <Plug>(MarkdownPreviewStop)
 nnoremap <C-S> <Plug>(MarkdownPreviewToggle)
 " }}}
+" airline settings --{{{
+" use powerline fonts for airline plugin
+let g:airline_powerline_fonts = 1
+
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.whitespace = 'Ξ'
+"
+" airline theme
+let g:airline_theme = 'base16_gruvbox_dark_hard'
+
+" show errors and warnings in the status line
+let g:airline#extensions#ale#enabled = 1
+"}}}
 
 colorscheme gruvbox
 let g:gruvbox_contrast_dark = 'soft'
