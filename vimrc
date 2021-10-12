@@ -312,6 +312,7 @@ augroup cFiles
                 \ setlocal textwidth=80     |
                 \ setlocal colorcolumn=-1
     au FileType c nnoremap <buffer> <leader>c I//<space><esc>
+augroup END
 " }}}
 " Python file settings ---{{{
 augroup pythonFiles
@@ -447,6 +448,7 @@ inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "\<C-k>"
 
 " ":CocList extensions" to look up installed coc extensions
 " ":CocInstall xxx" to install desired extensions/LSPs
+" ":CocUninstall xxx" to uninstall extensions/LSPs
 "}}}
 " ultisnips settings ---{{{
 " the following four settings are just not working...
@@ -459,28 +461,24 @@ let g:UltiSnipsEditSplit = "tabdo"
 nnoremap <leader>es :UltiSnipsEdit<cr>
 "}}}
 " vimtex settings ---{{{
+" need to install zathura and latexmk
 let g:tex_flavor='latex'
+let g:vimtex_view_method='zathura'
 let g:vimtex_quickfix_mode=0
 let g:tex_conceal='abdgm'
 
-" it should be vimtex_view_method, but that doesn't work
-let g:vimtex_view_general_viewer='zathura'
+" augroup vimtex_event_init
+"     au!
+"     au User VimtexEventTocActivated normal! zz
+" augroup END
 
-" the following only works when vimtex_view_method is set to zathura
-" instead of the current vimtex_view_general_viewer.
-" let g:vimtex_view_zathura_hook_view='ViewerPosition'
-" function! ViewerPosition() abort dict
-"       echom 'See what I am:' string(self)
-"   " call self.move('0 0')
-"   " call self.resize('1600 876')
+" function! ViewerPosition() " abort dict
+"   echom 'See what I am:' string(self)
+"   call self.move('0 0')
+"   call self.resize('1600 876')
 " endfunction
 
-" For synctex forward
-" au FileType tex nmap <Leader>f :call SyncTexForward()<CR>
-" function! SyncTexForward()
-"     let execstr = "silent !zathura --synctex-forward ".line(".").":".col(".").":%:p %:p:r.pdf &"
-"     exec execstr
-" endfunction
+" Don't know how to do backward synctex and positioning zathura window
 "}}}
 " Vifm settings ---{{{
 " Color scheme setting:
