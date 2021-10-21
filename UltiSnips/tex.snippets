@@ -662,6 +662,24 @@ snippet l{__ "dynamic big parenthesis subscript" iA
 {\\left\\{$1\\right\\}}_{$2}$3
 endsnippet
 
+priority 100
+context "math()"
+snippet <__ "angle brackets subscript" iA
+{\\langle$1\\rangle}_{$2}$3
+endsnippet
+
+priority 200
+context "math()"
+snippet l<__ "dynamic angle brackets subscript" iA
+{\\left\\langle$1\\right\\rangle}_{$2}$3
+endsnippet
+
+
+context "math()"
+snippet lr< "<> - height adjusted" iA
+\\left\\langle$1\\right\\rangle$2
+endsnippet
+
 context "math()"
 snippet lr( "() - height adjusted" iA
 \\left($1\\right)$2
@@ -716,6 +734,12 @@ snippet |tp "{||}^{}" iA
 {|$1|}^{$2}$3
 endsnippet
 
+priority 100
+context "math()"
+snippet <tp "{<>}^{}" iA
+{\\langle$1\\rangle}^{$2}$3
+endsnippet
+
 priority 200
 context "math()"
 snippet l(tp "{()}^{} - height adjusted" iA
@@ -738,6 +762,12 @@ priority 200
 context "math()"
 snippet l|tp "{||}^{} - height adjusted" iA
 {\\left|$1\\right|}^{$2}$3
+endsnippet
+
+priority 200
+context "math()"
+snippet l<tp "{<>}^{} - height adjusted" iA
+{\\left\\langle$1\\right\\rangle}^{$2}$3
 endsnippet
 
 priority 100
