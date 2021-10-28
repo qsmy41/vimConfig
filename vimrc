@@ -314,6 +314,19 @@ augroup cFiles
     au FileType c nnoremap <buffer> <leader>c I//<space><esc>
 augroup END
 " }}}
+" C++ file settings ---{{{
+augroup cppFiles
+    au!
+    au FileType cpp
+                \ setlocal expandtab        |
+                \ setlocal tabstop=4        |
+                \ setlocal softtabstop=4    |
+                \ setlocal shiftwidth=4     |
+                \ setlocal textwidth=80     |
+                \ setlocal colorcolumn=-1
+    au FileType cpp nnoremap <buffer> <leader>c I//<space><esc>
+augroup END
+" }}}
 " Python file settings ---{{{
 augroup pythonFiles
     au!
@@ -490,16 +503,16 @@ let g:tex_conceal='abdgm'
 " nnoremap <leader>fw :Vifm ~/ %:h<cr>
 "}}}
 " fugitive settings ---{{{
-nnoremap <leader>gs :Gstatus<cr>
+nnoremap <leader>gs :Git<cr>
 nnoremap <leader>gd :Gvdiffsplit<cr>
 nnoremap <leader>gw :Gwrite<cr>
 nnoremap <leader>gr :Gread<cr>
-nnoremap <leader>gc :Gcommit<cr>
+nnoremap <leader>gc :Git commit<cr>
 nnoremap <leader>gv :Gremove<cr>
 nnoremap <leader>gm :Gmove
-nnoremap <leader>gh :Gblame<cr>
+nnoremap <leader>gh :Git blame<cr>
 nnoremap <leader>gl :Glog<cr>
-nnoremap <leader>gp :Gpush<cr>
+nnoremap <leader>gp :Git push<cr>
 nnoremap <leader>gb :Gbranch<cr>
 "}}}
 " fzf settings ---{{{
@@ -695,7 +708,7 @@ function! s:defx_my_settings() abort
   nnoremap <silent><buffer><expr> p     defx#do_action('paste')
   nnoremap <silent><buffer><expr> l     defx#do_action('open')
   nnoremap <silent><buffer><expr> o     defx#do_action('drop')
-  nnoremap <silent><buffer><expr> E     defx#do_action('open', 'vsplit')
+  nnoremap <silent><buffer><expr> E     defx#do_action('open', 'botright vsplit')
   nnoremap <silent><buffer><expr> P     defx#do_action('open', 'pedit')
   nnoremap <silent><buffer><expr> T     defx#do_action('open', 'tabnew')
   nnoremap <silent><buffer><expr> t     defx#do_action('open_or_close_tree')
