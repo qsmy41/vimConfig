@@ -319,9 +319,9 @@ augroup cppFiles
     au!
     au FileType cpp
                 \ setlocal expandtab        |
-                \ setlocal tabstop=4        |
-                \ setlocal softtabstop=4    |
-                \ setlocal shiftwidth=4     |
+                \ setlocal tabstop=2        |
+                \ setlocal softtabstop=2    |
+                \ setlocal shiftwidth=2     |
                 \ setlocal textwidth=80     |
                 \ setlocal colorcolumn=-1
     au FileType cpp nnoremap <buffer> <leader>c I//<space><esc>
@@ -365,8 +365,10 @@ augroup htmlFiles
     au BufWritePre,BufRead *.html :normal! gg=G
 augroup END
 "}}}
-" JavaScript file settings ---{{{ augroup javascriptFile au!
-    au FileType javascript  nnoremap <buffer> <leader>c    I//<space><esc>
+" JavaScript file settings ---{{{
+augroup javascriptFile
+    au!
+    au FileType javascript nnoremap <buffer> <leader>c    I//<space><esc>
 augroup END
 "}}}
 
@@ -435,6 +437,8 @@ Plug 'easymotion/vim-easymotion'
 Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
 " markdown preview
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
+" formatter (for cpp for instance)
+Plug 'Chiel92/vim-autoformat'
 
 call plug#end()
 "}}}
@@ -566,17 +570,17 @@ let g:fzf_buffers_jump = 1
 
 " An action can be a reference to a function that processes selected lines
 function! s:build_quickfix_list(lines)
-  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
-  copen
-  cc
+    call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+    copen
+    cc
 endfunction
 
 " This is the default extra key bindings
 let g:fzf_action = {
-  \ 'ctrl-q': function('s:build_quickfix_list'),
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-x': 'split',
-  \ 'ctrl-v': 'vsplit' }
+            \ 'ctrl-q': function('s:build_quickfix_list'),
+            \ 'ctrl-t': 'tab split',
+            \ 'ctrl-x': 'split',
+            \ 'ctrl-v': 'vsplit' }
 
 " Default fzf layout
 " - down / up / left / right
@@ -587,19 +591,19 @@ let g:fzf_preview_window = 'right:60%'
 " Customize fzf colors to match your color scheme
 " - fzf#wrap translates this to a set of `--color` options
 let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
+            \ { 'fg':      ['fg', 'Normal'],
+            \ 'bg':      ['bg', 'Normal'],
+            \ 'hl':      ['fg', 'Comment'],
+            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+            \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+            \ 'hl+':     ['fg', 'Statement'],
+            \ 'info':    ['fg', 'PreProc'],
+            \ 'border':  ['fg', 'Ignore'],
+            \ 'prompt':  ['fg', 'Conditional'],
+            \ 'pointer': ['fg', 'Exception'],
+            \ 'marker':  ['fg', 'Keyword'],
+            \ 'spinner': ['fg', 'Label'],
+            \ 'header':  ['fg', 'Comment'] }
 "}}}
 " Startify settings ---{{{
 let g:startify_change_to_dir = 0
@@ -638,7 +642,7 @@ nnoremap <leader>vs :Vista!!<cr>
 nnoremap <leader>vf :Vista finder<cr>
 
 function! NearestMethodOrFunction() abort
-return get(b:, 'vista_nearest_method_or_function', '')
+    return get(b:, 'vista_nearest_method_or_function', '')
 endfunction
 
 set statusline+=%{NearestMethodOrFunction()}
@@ -674,8 +678,8 @@ let g:vista_default_executive = 'coc'
 " for some certain filetypes.The file path will be appened to your custom command.
 " For example:
 let g:vista_ctags_cmd = {
-  \ 'haskell': 'hasktags -x -o - -c',
-  \ }
+            \ 'haskell': 'hasktags -x -o - -c',
+            \ }
 
 " To enable fzf's preview window set g:vista_fzf_preview.
 " The elements of g:vista_fzf_preview will be passed as arguments to fzf#vim#with_preview()
@@ -687,9 +691,9 @@ let g:vista#renderer#enable_icon = 1
 
 " The default icons can't be suitable for all the filetypes, you can extend it as you wish.
 let g:vista#renderer#icons = {
-\   "function": "\uf794",
-\   "variable": "\uf71b",
-\  }
+            \   "function": "\uf794",
+            \   "variable": "\uf71b",
+            \  }
 "}}}
 " Defx settings ---{{{
 " need to install pynvim by "pip install pynvim"
@@ -701,65 +705,65 @@ autocmd BufWritePost * call defx#redraw()
 
 autocmd FileType defx call s:defx_my_settings()
 function! s:defx_my_settings() abort
-  " Define mappings
-  nnoremap <silent><buffer><expr> <CR>  defx#do_action('open')
-  nnoremap <silent><buffer><expr> c     defx#do_action('copy')
-  nnoremap <silent><buffer><expr> m     defx#do_action('move')
-  nnoremap <silent><buffer><expr> p     defx#do_action('paste')
-  nnoremap <silent><buffer><expr> l     defx#do_action('open')
-  nnoremap <silent><buffer><expr> o     defx#do_action('drop')
-  nnoremap <silent><buffer><expr> E     defx#do_action('open', 'botright vsplit')
-  nnoremap <silent><buffer><expr> P     defx#do_action('open', 'pedit')
-  nnoremap <silent><buffer><expr> T     defx#do_action('open', 'tabnew')
-  nnoremap <silent><buffer><expr> f     defx#do_action('open_or_close_tree')
-  nnoremap <silent><buffer><expr> K     defx#do_action('new_directory')
-  nnoremap <silent><buffer><expr> N     defx#do_action('new_file')
-  nnoremap <silent><buffer><expr> M     defx#do_action('new_multiple_files')
-  nnoremap <silent><buffer><expr> S     defx#do_action('toggle_sort', 'time')
-  nnoremap <silent><buffer><expr> d     defx#do_action('remove')
-  nnoremap <silent><buffer><expr> r     defx#do_action('rename')
-  nnoremap <silent><buffer><expr> !     defx#do_action('execute_command')
-  nnoremap <silent><buffer><expr> x     defx#do_action('execute_system')
-  nnoremap <silent><buffer><expr> yy    defx#do_action('yank_path')
-  nnoremap <silent><buffer><expr> .     defx#do_action('toggle_ignored_files')
-  nnoremap <silent><buffer><expr> ;     defx#do_action('repeat')
-  nnoremap <silent><buffer><expr> h     defx#do_action('cd', ['..'])
-  nnoremap <silent><buffer><expr> ~     defx#do_action('cd')
-  nnoremap <silent><buffer><expr> q     defx#do_action('quit')
-  nnoremap <silent><buffer><expr> *     defx#do_action('toggle_select_all')
-  nnoremap <silent><buffer><expr> j     line('.') == line('$') ? 'gg' : 'j'
-  nnoremap <silent><buffer><expr> k     line('.') == 1 ? 'G' : 'k'
-  nnoremap <silent><buffer><expr> <C-r> defx#do_action('redraw')
-  nnoremap <silent><buffer><expr> <C-g> defx#do_action('print')
-  nnoremap <silent><buffer><expr> cd    defx#do_action('change_vim_cwd')
-  nnoremap <silent><buffer><expr> <C-h> '<C-w>h'
-  nnoremap <silent><buffer><expr> <C-l> '<C-w>l'
-  nnoremap <silent><buffer><expr> <Space> defx#do_action('toggle_select') . 'j'
-  nnoremap <silent><buffer><expr> C
-  \ defx#do_action('toggle_columns', 'mark:indent:icon:filename:type:size:time')
-  nnoremap <silent><buffer><expr> >
-  \ defx#do_action('resize', defx#get_context().winwidth + 5)
-  nnoremap <silent><buffer><expr> <
-  \ defx#do_action('resize', defx#get_context().winwidth - 5)
+    " Define mappings
+    nnoremap <silent><buffer><expr> <CR>  defx#do_action('open')
+    nnoremap <silent><buffer><expr> c     defx#do_action('copy')
+    nnoremap <silent><buffer><expr> m     defx#do_action('move')
+    nnoremap <silent><buffer><expr> p     defx#do_action('paste')
+    nnoremap <silent><buffer><expr> l     defx#do_action('open')
+    nnoremap <silent><buffer><expr> o     defx#do_action('drop')
+    nnoremap <silent><buffer><expr> E     defx#do_action('open', 'botright vsplit')
+    nnoremap <silent><buffer><expr> P     defx#do_action('open', 'pedit')
+    nnoremap <silent><buffer><expr> T     defx#do_action('open', 'tabnew')
+    nnoremap <silent><buffer><expr> f     defx#do_action('open_or_close_tree')
+    nnoremap <silent><buffer><expr> K     defx#do_action('new_directory')
+    nnoremap <silent><buffer><expr> N     defx#do_action('new_file')
+    nnoremap <silent><buffer><expr> M     defx#do_action('new_multiple_files')
+    nnoremap <silent><buffer><expr> S     defx#do_action('toggle_sort', 'time')
+    nnoremap <silent><buffer><expr> d     defx#do_action('remove')
+    nnoremap <silent><buffer><expr> r     defx#do_action('rename')
+    nnoremap <silent><buffer><expr> !     defx#do_action('execute_command')
+    nnoremap <silent><buffer><expr> x     defx#do_action('execute_system')
+    nnoremap <silent><buffer><expr> yy    defx#do_action('yank_path')
+    nnoremap <silent><buffer><expr> .     defx#do_action('toggle_ignored_files')
+    nnoremap <silent><buffer><expr> ;     defx#do_action('repeat')
+    nnoremap <silent><buffer><expr> h     defx#do_action('cd', ['..'])
+    nnoremap <silent><buffer><expr> ~     defx#do_action('cd')
+    nnoremap <silent><buffer><expr> q     defx#do_action('quit')
+    nnoremap <silent><buffer><expr> *     defx#do_action('toggle_select_all')
+    nnoremap <silent><buffer><expr> j     line('.') == line('$') ? 'gg' : 'j'
+    nnoremap <silent><buffer><expr> k     line('.') == 1 ? 'G' : 'k'
+    nnoremap <silent><buffer><expr> <C-r> defx#do_action('redraw')
+    nnoremap <silent><buffer><expr> <C-g> defx#do_action('print')
+    nnoremap <silent><buffer><expr> cd    defx#do_action('change_vim_cwd')
+    nnoremap <silent><buffer><expr> <C-h> '<C-w>h'
+    nnoremap <silent><buffer><expr> <C-l> '<C-w>l'
+    nnoremap <silent><buffer><expr> <Space> defx#do_action('toggle_select') . 'j'
+    nnoremap <silent><buffer><expr> C
+                \ defx#do_action('toggle_columns', 'mark:indent:icon:filename:type:size:time')
+    nnoremap <silent><buffer><expr> >
+                \ defx#do_action('resize', defx#get_context().winwidth + 5)
+    nnoremap <silent><buffer><expr> <
+                \ defx#do_action('resize', defx#get_context().winwidth - 5)
 
-  call defx#custom#column('icon', {
-        \ 'directory_icon': '▸',
-        \ 'opened_icon': '▾',
-        \ 'root_icon': ' ',
-        \ })
+    call defx#custom#column('icon', {
+                \ 'directory_icon': '▸',
+                \ 'opened_icon': '▾',
+                \ 'root_icon': ' ',
+                \ })
 
-  call defx#custom#column('filename', {
-        \ 'min_width': 40,
-        \ 'max_width': 40,
-        \ })
+    call defx#custom#column('filename', {
+                \ 'min_width': 40,
+                \ 'max_width': 40,
+                \ })
 
-  call defx#custom#column('mark', {
-        \ 'readonly_icon': '✗',
-        \ 'selected_icon': '✓',
-        \ })
+    call defx#custom#column('mark', {
+                \ 'readonly_icon': '✗',
+                \ 'selected_icon': '✓',
+                \ })
 
-  set relativenumber
-  set number
+    set relativenumber
+    set number
 endfunction
 "}}}
 " easy-motion settings ---{{{
@@ -846,18 +850,18 @@ let g:mkdp_browserfunc = ''
 " content_editable: if enable content editable for preview page, default: v:false
 " disable_filename: if disable filename header for preview page, default: 0
 let g:mkdp_preview_options = {
-    \ 'mkit': {},
-    \ 'katex': {},
-    \ 'uml': {},
-    \ 'maid': {},
-    \ 'disable_sync_scroll': 0,
-    \ 'sync_scroll_type': 'middle',
-    \ 'hide_yaml_meta': 1,
-    \ 'sequence_diagrams': {},
-    \ 'flowchart_diagrams': {},
-    \ 'content_editable': v:false,
-    \ 'disable_filename': 0
-    \ }
+            \ 'mkit': {},
+            \ 'katex': {},
+            \ 'uml': {},
+            \ 'maid': {},
+            \ 'disable_sync_scroll': 0,
+            \ 'sync_scroll_type': 'middle',
+            \ 'hide_yaml_meta': 1,
+            \ 'sequence_diagrams': {},
+            \ 'flowchart_diagrams': {},
+            \ 'content_editable': v:false,
+            \ 'disable_filename': 0
+            \ }
 
 " use a custom markdown style must be absolute path
 " like '/Users/username/markdown.css' or expand('~/markdown.css')
@@ -899,6 +903,14 @@ let g:airline_theme = 'base16_gruvbox_dark_hard'
 
 " show errors and warnings in the status line
 let g:airline#extensions#ale#enabled = 1
+"}}}
+" vim-autoformat settings --{{{
+" disable the fallback to vim's configurations
+let g:autoformat_autoindent = 0
+let g:autoformat_retab = 0
+let g:autoformat_remove_trailing_spaces = 0
+
+noremap <F3> :Autoformat<CR>
 "}}}
 
 colorscheme gruvbox
