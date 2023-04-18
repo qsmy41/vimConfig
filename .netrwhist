@@ -1,6 +1,12 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =4
-let g:netrw_dirhist_4='/Users/qsmy41/Documents/ICL/Academic Activities/CP/Notes'
-let g:netrw_dirhist_3='/Users/qsmy41/Documents/ICL/Academic Activities/CP'
-let g:netrw_dirhist_2='/Users/qsmy41/Documents/ICL/Theories of deep learning/autoencoder/report'
-let g:netrw_dirhist_1='/Users/qsmy41/Documents/ICL/Academic Activities/CP/Global Round 11'
+let g:netrw_dirhistcnt =0
+let g:netrw_dirhist_0='/home/aris/Documents/master-thesis/soundness'
+let g:netrw_dirhist_9='/home/aris/Documents/master-thesis/tinystm'
+let g:netrw_dirhist_8='/home/aris/Documents/master-thesis/implementation'
+let g:netrw_dirhist_7='/home/aris/Documents/master-thesis/background'
+let g:netrw_dirhist_6='/home/aris/Documents/master-thesis/title'
+let g:netrw_dirhist_5='/home/aris/Documents/master-thesis/background'
+let g:netrw_dirhist_4='/home/aris/Documents/comp-lin-alg-course/cla_utils'
+let g:netrw_dirhist_3='/home/aris/Documents/comp-lin-alg-course/test'
+let g:netrw_dirhist_2='/home/aris/Documents/comp-lin-alg-course/cla_utils'
+let g:netrw_dirhist_1='/home/aris/Documents/computing-notes/CO60007 Concurrency'

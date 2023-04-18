@@ -460,8 +460,18 @@ autocmd QuitPre * if empty(&bt) | lclose | endif
 "}}}
 " COC settings ---{{{
 " Use <C-j> and <C-k> to navigate the completion list
-inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
-inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "\<C-k>"
+inoremap <silent><expr> <C-j>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<C-j>" :
+      \ coc#refresh()
+inoremap <expr><C-k> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
+" inoremap <expr> <C-k> pumvisible() ? "\<C-P>" : "\<C-k>"
 
 " ":CocList extensions" to look up installed coc extensions
 " ":CocInstall xxx" to install desired extensions/LSPs
@@ -487,6 +497,7 @@ let g:tex_conceal='abdgm'
 " augroup vimtex_event_init
 "     au!
 "     au User VimtexEventTocActivated normal! zz
+"     au User VimtexEventTocActivated call ViewerPosition()
 " augroup END
 
 " function! ViewerPosition() " abort dict
